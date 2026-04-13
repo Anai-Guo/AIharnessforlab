@@ -1,4 +1,5 @@
 """Keithley 6221 AC/DC Current Source driver."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

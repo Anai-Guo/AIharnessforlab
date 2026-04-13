@@ -145,37 +145,68 @@ def test_measurement_type_values():
     """All measurement types are defined."""
     expected = {
         # Original
-        "AHE", "MR", "IV", "RT", "SOT", "CV",
+        "AHE",
+        "MR",
+        "IV",
+        "RT",
+        "SOT",
+        "CV",
         # Electrical characterization
-        "DELTA", "HIGH_R", "TRANSFER", "OUTPUT", "BREAKDOWN",
+        "DELTA",
+        "HIGH_R",
+        "TRANSFER",
+        "OUTPUT",
+        "BREAKDOWN",
         # Thermoelectric
-        "SEEBECK", "THERMAL_CONDUCTIVITY",
+        "SEEBECK",
+        "THERMAL_CONDUCTIVITY",
         # Magnetic
-        "HALL", "FMR", "HYSTERESIS",
+        "HALL",
+        "FMR",
+        "HYSTERESIS",
         # Optical / Photonic
-        "PHOTOCURRENT", "PHOTORESPONSE",
+        "PHOTOCURRENT",
+        "PHOTORESPONSE",
         # Superconductivity
-        "TC", "JC",
+        "TC",
+        "JC",
         # Dielectric / Ferroelectric
-        "PE_LOOP", "PYROELECTRIC",
+        "PE_LOOP",
+        "PYROELECTRIC",
         # Chemistry / Electrochemistry
-        "CYCLIC_VOLTAMMETRY", "EIS", "CHRONOAMPEROMETRY", "POTENTIOMETRY",
+        "CYCLIC_VOLTAMMETRY",
+        "EIS",
+        "CHRONOAMPEROMETRY",
+        "POTENTIOMETRY",
         # Biology / Biosensors
-        "IMPEDANCE_BIOSENSOR", "CELL_COUNTING",
+        "IMPEDANCE_BIOSENSOR",
+        "CELL_COUNTING",
         # Materials Science
-        "STRAIN_GAUGE", "FATIGUE", "HUMIDITY_RESPONSE",
+        "STRAIN_GAUGE",
+        "FATIGUE",
+        "HUMIDITY_RESPONSE",
         # Environmental / Sensor
-        "GAS_SENSOR", "PH_CALIBRATION",
+        "GAS_SENSOR",
+        "PH_CALIBRATION",
         # Semiconductor
-        "CAPACITANCE_FREQUENCY", "DLTS", "PHOTO_IV",
+        "CAPACITANCE_FREQUENCY",
+        "DLTS",
+        "PHOTO_IV",
         # Additional Physics
-        "MAGNETOSTRICTION", "NERNST", "TUNNELING",
+        "MAGNETOSTRICTION",
+        "NERNST",
+        "TUNNELING",
         # Quantum Design PPMS
-        "PPMS_RT", "PPMS_MR", "PPMS_HALL", "PPMS_HC",
+        "PPMS_RT",
+        "PPMS_MR",
+        "PPMS_HALL",
+        "PPMS_HC",
         # Quantum Design MPMS
-        "MPMS_MH", "MPMS_MT",
+        "MPMS_MH",
+        "MPMS_MT",
         # General purpose
-        "CUSTOM_SWEEP", "CUSTOM",
+        "CUSTOM_SWEEP",
+        "CUSTOM",
     }
     actual = {mt.value for mt in MeasurementType}
     assert actual == expected

@@ -1,4 +1,5 @@
 """Keithley 2400 SourceMeter driver."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

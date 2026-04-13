@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Harness for Lab</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+.header { background: linear-gradient(135deg, #1e1b4b, #312e81); padding: 24px 32px; border-bottom: 2px solid #4f46e5; }
+.header h1 { font-size: 28px; font-weight: 700; }
+.header h1 span { color: #a78bfa; }
+.header p { color: #94a3b8; margin-top: 4px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+.grid { display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
+.sidebar { background: #1e293b; border-radius: 12px; padding: 16px; max-height: calc(100vh - 160px); overflow-y: auto; }
+.sidebar h3 { color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 8px; }
+.sidebar h3:first-child { margin-top: 0; }
+.template-btn { display: block; width: 100%; text-align: left; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; color: #e2e8f0; cursor: pointer; transition: all 0.2s; font-size: 13px; }
+.template-btn:hover { border-color: #6366f1; background: #1e1b4b; }
+.template-btn.active { border-color: #6366f1; background: #312e81; }
+.template-btn .desc { color: #64748b; font-size: 11px; margin-top: 2px; }
+.main { background: #1e293b; border-radius: 12px; padding: 24px; }
+.main h2 { margin-bottom: 16px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+.field input, .field select { background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 12px; color: #e2e8f0; font-size: 14px; }
+.field input:focus { outline: none; border-color: #6366f1; }
+.safety-box { background: #1c1917; border: 1px solid #854d0e; border-radius: 8px; padding: 12px; margin-top: 16px; }
+.safety-box h4 { color: #fbbf24; font-size: 13px; margin-bottom: 8px; }
+.safety-box .limit { color: #a3a3a3; font-size: 12px; }
+.channels { margin-top: 16px; }
+.channel-tag { display: inline-block; background: #312e81; border-radius: 12px; padding: 4px 12px; font-size: 12px; margin: 4px 4px 4px 0; color: #c4b5fd; }
+.btn-row { margin-top: 20px; display: flex; gap: 12px; }
+.btn { padding: 10px 24px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: #6366f1; color: white; }
+.btn-primary:hover { background: #4f46e5; }
+.btn-secondary { background: #334155; color: #e2e8f0; }
+.btn-secondary:hover { background: #475569; }
+.status-bar { background: #1e293b; border-radius: 8px; padding: 12px 16px; margin-top: 16px; font-size: 13px; color: #94a3b8; }
+.status-bar .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.dot-green { background: #22c55e; }
+.dot-red { background: #ef4444; }
+.empty-state { text-align: center; padding: 60px; color: #64748b; }
+.empty-state h3 { font-size: 18px; margin-bottom: 8px; color: #94a3b8; }
+#result { margin-top: 16px; background: #0f172a; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; display: none; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><span>AI</span> Harness for Lab</h1>
+  <p>Fully Automated Lab Assistant &mdash; Select a measurement template to begin</p>
+</div>
+<div class="container">
+  <div class="grid">
+    <div class="sidebar" id="sidebar">
+      <p style="color:#64748b;font-size:13px;">Loading templates...</p>
+    </div>
+    <div class="main" id="main">
+      <div class="empty-state">
+        <h3>Select a measurement template</h3>
+        <p>Choose from the sidebar to configure your measurement</p>
+      </div>
+    </div>
+  </div>
+  <div class="status-bar" id="statusBar">
+    <span class="dot dot-green"></span> System ready
+  </div>
+</div>
+
+<script>
+let templates = {};
+let currentTemplate = null;
+
+async function loadTemplates() {
+  const res = await fetch("/api/templates");
+  const data = await res.json();
+  templates = data.templates;
+  renderSidebar();
+}
+
+function renderSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const groups = {};
+
+  // Group templates by category
+  for (const [key, t] of Object.entries(templates)) {
+    let cat = "General";
+    if (key.startsWith("ppms_") || key.startsWith("mpms_")) cat = "Quantum Design";
+    else if (["ahe","mr","sot","hall","fmr","hysteresis","magnetostriction","nernst"].includes(key)) cat = "Magnetic";
+    else if (["iv","rt","delta","high_r","transfer","output","breakdown","tunneling"].includes(key)) cat = "Electrical";
+    else if (["tc","jc"].includes(key)) cat = "Superconductivity";
+    else if (["cv","pe_loop","pyroelectric","capacitance_frequency","dlts","eis"].includes(key)) cat = "Dielectric / Electrochem";
+    else if (["seebeck","thermal_conductivity"].includes(key)) cat = "Thermoelectric";
+    else if (["photocurrent","photoresponse","photo_iv"].includes(key)) cat = "Optical / Solar";
+    else if (["cyclic_voltammetry","chronoamperometry","potentiometry"].includes(key)) cat = "Chemistry";
+    else if (["gas_sensor","ph_calibration","humidity_response","impedance_biosensor","cell_counting"].includes(key)) cat = "Sensors / Bio";
+    else if (["strain_gauge","fatigue"].includes(key)) cat = "Materials";
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push({key, ...t});
+  }
+
+  let html = "";
+  for (const [cat, items] of Object.entries(groups).sort()) {
+    html += `<h3>${cat} (${items.length})</h3>`;
+    for (const item of items) {
+      html += `<button class="template-btn" onclick="selectTemplate('${item.key}')" id="btn-${item.key}">
+        ${item.name}
+        <div class="desc">${item.description.substring(0,60)}</div>
+      </button>`;
+    }
+  }
+  sidebar.innerHTML = html;
+}
+
+async function selectTemplate(key) {
+  document.querySelectorAll(".template-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("btn-"+key)?.classList.add("active");
+
+  const res = await fetch(`/api/templates/${key}`);
+  currentTemplate = await res.json();
+  currentTemplate._key = key;
+  renderForm(currentTemplate);
+}
+
+function renderForm(t) {
+  const main = document.getElementById("main");
+  const x = t.x_axis || {};
+  const channels = (t.y_channels || []).map(c =>
+    `<span class="channel-tag">${c.label} (${c.unit})</span>`
+  ).join("");
+
+  let outerHtml = "";
+  if (t.outer_sweep) {
+    const o = t.outer_sweep;
+    outerHtml = `
+      <div class="field"><label>Outer: ${o.label} Start (${o.unit})</label><input type="number" value="${o.start}" id="outer_start"></div>
+      <div class="field"><label>Outer: ${o.label} Stop (${o.unit})</label><input type="number" value="${o.stop}" id="outer_stop"></div>
+      <div class="field"><label>Outer Step (${o.unit})</label><input type="number" value="${o.step}" id="outer_step"></div>
+    `;
+  }
+
+  main.innerHTML = `
+    <h2>${t.name || t._key}</h2>
+    <p style="color:#94a3b8;margin-bottom:16px;">${t.description || ""}</p>
+
+    <div class="form-grid">
+      <div class="field"><label>X: ${x.label} Start (${x.unit})</label><input type="number" value="${x.start}" id="x_start"></div>
+      <div class="field"><label>X: ${x.label} Stop (${x.unit})</label><input type="number" value="${x.stop}" id="x_stop"></div>
+      <div class="field"><label>Step (${x.unit})</label><input type="number" value="${x.step}" id="x_step"></div>
+      <div class="field"><label>Settling Time (s)</label><input type="number" value="${t.settling_time_s || 0.5}" id="settling"></div>
+      <div class="field"><label>Averages</label><input type="number" value="${t.num_averages || 1}" id="averages"></div>
+      ${outerHtml}
+    </div>
+
+    <div class="channels">
+      <label style="font-size:12px;color:#94a3b8;text-transform:uppercase;">Data Channels</label><br>
+      ${channels || '<span style="color:#64748b">No channels defined</span>'}
+    </div>
+
+    <div class="safety-box">
+      <h4>Safety Limits</h4>
+      <div class="limit">Max Current: ${t.max_current_a ? (t.max_current_a*1000).toFixed(1)+" mA" : "N/A"}</div>
+      <div class="limit">Max Voltage: ${t.max_voltage_v || "N/A"} V</div>
+      <div class="limit">Max Field: ${t.max_field_oe ? (t.max_field_oe/1000).toFixed(0)+" kOe" : "N/A"}</div>
+      <div class="limit">Max Temperature: ${t.max_temperature_k || "N/A"} K</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="validatePlan()">Validate Plan</button>
+      <button class="btn btn-secondary" onclick="generatePlan()">Generate Plan JSON</button>
+    </div>
+
+    <div id="result"></div>
+  `;
+}
+
+async function validatePlan() {
+  if (!currentTemplate) return;
+  const overrides = {
+    x_axis: {
+      start: parseFloat(document.getElementById("x_start").value),
+      stop: parseFloat(document.getElementById("x_stop").value),
+      step: parseFloat(document.getElementById("x_step").value),
+    },
+    settling_time_s: parseFloat(document.getElementById("settling").value),
+    num_averages: parseInt(document.getElementById("averages").value),
+  };
+  const res = await fetch("/api/plan?measurement_type=" + currentTemplate._key, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(overrides),
+  });
+  const data = await res.json();
+  const el = document.getElementById("result");
+  el.style.display = "block";
+  const v = data.validation;
+  let color = v.decision === "allow" ? "#22c55e" : v.decision === "require_confirm" ? "#fbbf24" : "#ef4444";
+  el.innerHTML = `<span style="color:${color};font-weight:bold;">${v.decision.toUpperCase()}</span>\\n`;
+  if (v.warnings?.length) el.innerHTML += "Warnings:\\n" + v.warnings.map(w=>"  - "+w).join("\\n") + "\\n";
+  if (v.violations?.length) el.innerHTML += "Violations:\\n" + v.violations.map(v=>"  - "+v.message).join("\\n") + "\\n";
+  el.innerHTML += "\\nTotal points: " + data.plan.x_axis.num_points;
+  if (v.ai_advice) el.innerHTML += "\\n\\nAI Advice: " + v.ai_advice;
+}
+
+async function generatePlan() {
+  if (!currentTemplate) return;
+  const el = document.getElementById("result");
+  el.style.display = "block";
+  const res = await fetch(`/api/templates/${currentTemplate._key}`);
+  el.textContent = JSON.stringify(await res.json(), null, 2);
+}
+
+// Init
+loadTemplates();
+fetch("/api/health").then(r=>r.json()).then(d=>{
+  const bar = document.getElementById("statusBar");
+  bar.innerHTML = `<span class="dot ${d.visa_available?'dot-green':'dot-red'}"></span>` +
+    `VISA: ${d.visa_available?'Connected':'Not available'} | ` +
+    `Instruments: ${d.instruments_found} | ` +
+    `Templates: ${d.templates_available}`;
+});
+</script>
+</body>
+</html>

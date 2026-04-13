@@ -2,12 +2,12 @@
 
 Inspired by PyGMI's configuration-driven instrument initialization.
 """
+
 from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
 
 import yaml
 
@@ -27,6 +27,7 @@ def _import_driver(driver_spec: str) -> type[InstrumentDriver]:
     """Import a driver class from a 'module:ClassName' spec."""
     module_path, class_name = driver_spec.rsplit(":", 1)
     import importlib
+
     module = importlib.import_module(module_path)
     return getattr(module, class_name)
 
@@ -64,10 +65,7 @@ class DriverRegistry:
         settings = config.get("settings", {})
 
         if driver_name not in DRIVER_MAP:
-            raise ValueError(
-                f"Unknown driver '{driver_name}'. "
-                f"Available: {list(DRIVER_MAP.keys())}"
-            )
+            raise ValueError(f"Unknown driver '{driver_name}'. Available: {list(DRIVER_MAP.keys())}")
 
         driver_cls = _import_driver(DRIVER_MAP[driver_name])
         instance = driver_cls(resource=resource, **settings)

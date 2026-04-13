@@ -1,4 +1,5 @@
 """Lakeshore 335 Temperature Controller driver."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

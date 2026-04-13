@@ -3,6 +3,7 @@
 Inspired by PyGMI (Argonne National Lab) Connect_Instrument pattern.
 Every instrument driver follows this interface for consistency.
 """
+
 from __future__ import annotations
 
 import logging
@@ -19,6 +20,7 @@ def retry(max_attempts: int = 3, delay: float = 1.0, backoff: float = 2.0):
 
     Inspired by PyGMI's retry_with pattern for handling flaky GPIB connections.
     """
+
     def decorator(func):
         def wrapper(*args, **kwargs):
             last_error = None
@@ -30,13 +32,18 @@ def retry(max_attempts: int = 3, delay: float = 1.0, backoff: float = 2.0):
                     last_error = e
                     logger.warning(
                         "%s failed (attempt %d/%d): %s",
-                        func.__name__, attempt + 1, max_attempts, e,
+                        func.__name__,
+                        attempt + 1,
+                        max_attempts,
+                        e,
                     )
                     if attempt < max_attempts - 1:
                         time.sleep(wait)
                         wait *= backoff
             raise last_error
+
         return wrapper
+
     return decorator
 
 
@@ -96,6 +103,7 @@ class VisaDriver(InstrumentDriver):
 
     def connect(self) -> None:
         import pyvisa
+
         rm = pyvisa.ResourceManager()
         self._instrument = rm.open_resource(self.resource, timeout=self.timeout_ms)
         self._connected = True
