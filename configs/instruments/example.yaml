@@ -1,0 +1,34 @@
+# Example instrument configuration file
+# Copy and edit for your lab setup
+
+instruments:
+  source_meter:
+    driver: keithley2400
+    resource: "GPIB0::5::INSTR"
+    settings:
+      compliance_v: 20.0
+      timeout_ms: 5000
+
+  nanovoltmeter:
+    driver: keithley2182a
+    resource: "GPIB0::7::INSTR"
+    settings:
+      timeout_ms: 5000
+
+  current_source:
+    driver: keithley6221
+    resource: "GPIB0::12::INSTR"
+    settings:
+      timeout_ms: 5000
+
+  temperature_controller:
+    driver: lakeshore335
+    resource: "GPIB0::10::INSTR"
+    settings:
+      timeout_ms: 3000
+
+  gaussmeter:
+    driver: lakeshore425
+    resource: "COM3"
+    settings:
+      timeout_ms: 2000

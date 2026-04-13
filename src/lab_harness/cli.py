@@ -156,6 +156,13 @@ def cmd_procedures(args: argparse.Namespace, settings: Settings) -> None:
         print()
 
 
+def cmd_web(args: argparse.Namespace, settings: Settings) -> None:
+    """Start the adaptive Web GUI."""
+    from lab_harness.web.app import run_web
+
+    run_web(host=args.host, port=args.port)
+
+
 def cmd_serve(args: argparse.Namespace, settings: Settings) -> None:
     """Start the MCP server."""
     from lab_harness.server import run_server
@@ -214,6 +221,11 @@ def main() -> None:
     # procedures
     sub.add_parser("procedures", help="List PICA reference measurement procedures")
 
+    # web
+    p_web = sub.add_parser("web", help="Start the adaptive Web GUI")
+    p_web.add_argument("--host", default="127.0.0.1", help="Bind address (default: 127.0.0.1)")
+    p_web.add_argument("--port", type=int, default=8080, help="Port (default: 8080)")
+
     # serve
     sub.add_parser("serve", help="Start MCP server")
 
@@ -232,6 +244,7 @@ def main() -> None:
         "analyze": cmd_analyze,
         "procedures": cmd_procedures,
         "chat": cmd_chat,
+        "web": cmd_web,
         "serve": cmd_serve,
     }
     cmd_map[args.command](args, settings)
