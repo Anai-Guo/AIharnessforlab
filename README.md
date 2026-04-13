@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/hero.svg" alt="AI Harness for Lab — 全自动实验助手" width="700">
+  <img src="assets/hero.svg" alt="AI Harness for Lab — Fully Automated Lab Assistant" width="700">
 </p>
 
 <p align="center">
