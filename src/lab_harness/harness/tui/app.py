@@ -144,14 +144,11 @@ class LabHarnessApp(App):
 
     def on_mount(self) -> None:
         log = self.query_one("#conversation", ConversationLog)
-        log.write(
-            "[bold #c8a96e]\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557[/]"
-        )
-        log.write("[bold #c8a96e]\u2551   LabAgent for Lab -- Terminal     \u2551[/]")
+        bar = "\u2550" * 38
+        log.write(f"[bold #c8a96e]\u2554{bar}\u2557[/]")
+        log.write("[bold #c8a96e]\u2551   LabAgent — Terminal               \u2551[/]")
         log.write("[bold #c8a96e]\u2551   Fully Automated Lab Assistant     \u2551[/]")
-        log.write(
-            "[bold #c8a96e]\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d[/]"
-        )
+        log.write(f"[bold #c8a96e]\u255a{bar}\u255d[/]")
         log.write("")
         log.write(f"[dim]Session: {self.session.session_id}[/]")
         log.write(f"[dim]Model: {self.settings.model.model}[/]")

@@ -79,8 +79,6 @@ async def run_query(
 
         choice = response["choices"][0]
         msg = choice["message"]
-        finish_reason = choice.get("finish_reason", "stop")
-
         # Yield text content
         text_content = msg.get("content") or ""
         if text_content:
