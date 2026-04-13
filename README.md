@@ -72,6 +72,17 @@ labharness web --port 8080
 
 The GUI dynamically generates measurement forms from YAML templates. Adding a new template file automatically makes it available in the web interface — no frontend code changes needed.
 
+<p align="center">
+  <img src="assets/gui_preview.svg" alt="Real-time Monitor with selectable axes, metric cards, and preset system" width="750">
+</p>
+
+Key monitor features:
+- **4 chart panels** with independently selectable X/Y axes from 17 data channels
+- **6 metric cards** that auto-configure based on measurement template
+- **Template selector** — switch between AHE, Hall, IV, etc. and the UI reconfigures
+- **Save/Load presets** — save your chart layout for each experiment type, restore with one click
+- **Real-time sidebar** — live channel values, sweep progress, elapsed time
+
 ## Supported Disciplines
 
 | Discipline | Count | Example Measurements |

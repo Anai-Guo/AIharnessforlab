@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500">
+  <defs>
+    <linearGradient id="gBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1e"/><stop offset="100%" style="stop-color:#1a1a3a"/>
+    </linearGradient>
+    <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#c8a96e"/><stop offset="100%" style="stop-color:#e8d5a0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Window frame -->
+  <rect width="900" height="500" rx="12" fill="#1a1a2e" stroke="#333" stroke-width="1"/>
+  <!-- Title bar -->
+  <rect width="900" height="32" rx="12" fill="#0d0d1a"/>
+  <rect y="20" width="900" height="12" fill="#0d0d1a"/>
+  <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+  <circle cx="38" cy="16" r="6" fill="#febc2e"/>
+  <circle cx="58" cy="16" r="6" fill="#28c840"/>
+  <text x="450" y="20" text-anchor="middle" font-family="Segoe UI, Arial" font-size="12" fill="#64748b">AI Harness for Lab — Monitor</text>
+
+  <!-- Header bar -->
+  <rect x="0" y="32" width="900" height="36" fill="url(#gBg)"/>
+  <line x1="0" y1="32" x2="900" y2="32" stroke="#c8a96e" stroke-width="1" opacity="0.4"/>
+  <text x="16" y="56" font-family="Cinzel, Georgia, serif" font-size="16" font-weight="700" fill="#ece5d8">
+    <tspan fill="#c882ff">AI</tspan> Harness — Monitor
+  </text>
+  <rect x="195" y="42" width="38" height="18" rx="9" fill="#22c55e" opacity="0.2" stroke="#22c55e" stroke-width="0.8"/>
+  <text x="214" y="55" text-anchor="middle" font-family="Segoe UI" font-size="9" font-weight="700" fill="#22c55e">LIVE</text>
+  <text x="820" y="55" font-family="Courier, monospace" font-size="11" fill="#64748b">03:02:37</text>
+  <text x="860" y="55" font-family="Segoe UI" font-size="10" fill="#c8a96e">← Dashboard</text>
+
+  <!-- Sidebar -->
+  <rect x="0" y="68" width="175" height="432" fill="#0d0d1a"/>
+  <line x1="175" y1="68" x2="175" y2="500" stroke="#2a2a55" stroke-width="1"/>
+
+  <text x="12" y="90" font-family="Segoe UI" font-size="10" font-weight="600" fill="#64748b" letter-spacing="1">CHANNELS</text>
+
+  <!-- Channel values -->
+  <circle cx="18" cy="108" r="4" fill="#4cc2ff"/>
+  <text x="30" y="112" font-family="Segoe UI" font-size="10" fill="#a09a8d">Voltage</text>
+  <text x="168" y="112" text-anchor="end" font-family="Courier" font-size="10" fill="#4cc2ff">944.9m V</text>
+
+  <circle cx="18" cy="128" r="4" fill="#7bc639"/>
+  <text x="30" y="132" font-family="Segoe UI" font-size="10" fill="#a09a8d">Current</text>
+  <text x="168" y="132" text-anchor="end" font-family="Courier" font-size="10" fill="#7bc639">938.3μ A</text>
+
+  <circle cx="18" cy="148" r="4" fill="#9cf0ff"/>
+  <text x="30" y="152" font-family="Segoe UI" font-size="10" fill="#a09a8d">Resistance</text>
+  <text x="168" y="152" text-anchor="end" font-family="Courier" font-size="10" fill="#9cf0ff">1.247k Ω</text>
+
+  <circle cx="18" cy="168" r="4" fill="#f0b232"/>
+  <text x="30" y="172" font-family="Segoe UI" font-size="10" fill="#a09a8d">Temperature</text>
+  <text x="168" y="172" text-anchor="end" font-family="Courier" font-size="10" fill="#f0b232">300.2 K</text>
+
+  <circle cx="18" cy="188" r="4" fill="#ff6b4a"/>
+  <text x="30" y="192" font-family="Segoe UI" font-size="10" fill="#a09a8d">Field</text>
+  <text x="168" y="192" text-anchor="end" font-family="Courier" font-size="10" fill="#ff6b4a">4.09k Oe</text>
+
+  <circle cx="18" cy="208" r="4" fill="#c882ff"/>
+  <text x="30" y="212" font-family="Segoe UI" font-size="10" fill="#a09a8d">Capacitance</text>
+  <text x="168" y="212" text-anchor="end" font-family="Courier" font-size="10" fill="#c882ff">47.1 pF</text>
+
+  <circle cx="18" cy="228" r="4" fill="#59c9a5"/>
+  <text x="30" y="232" font-family="Segoe UI" font-size="10" fill="#a09a8d">Hall Voltage</text>
+  <text x="168" y="232" text-anchor="end" font-family="Courier" font-size="10" fill="#59c9a5">204.3m V</text>
+
+  <circle cx="18" cy="248" r="4" fill="#f0b232"/>
+  <text x="30" y="252" font-family="Segoe UI" font-size="10" fill="#a09a8d">Power</text>
+  <text x="168" y="252" text-anchor="end" font-family="Courier" font-size="10" fill="#f0b232">600.1μ W</text>
+
+  <!-- Sweep section -->
+  <line x1="10" y1="275" x2="165" y2="275" stroke="#2a2a55" stroke-width="1"/>
+  <text x="12" y="295" font-family="Segoe UI" font-size="10" font-weight="600" fill="#64748b" letter-spacing="1">SWEEP</text>
+  <text x="12" y="315" font-family="Segoe UI" font-size="10" fill="#a09a8d">Progress</text>
+  <text x="168" y="315" text-anchor="end" font-family="Courier" font-size="10" fill="#c8a96e">47%</text>
+  <rect x="12" y="322" width="155" height="6" rx="3" fill="#1a1a3a"/>
+  <rect x="12" y="322" width="73" height="6" rx="3" fill="#c8a96e"/>
+  <text x="12" y="345" font-family="Segoe UI" font-size="10" fill="#a09a8d">Step</text>
+  <text x="168" y="345" text-anchor="end" font-family="Courier" font-size="10" fill="#ece5d8">94 / 200</text>
+
+  <!-- Toolbar -->
+  <rect x="175" y="68" width="725" height="32" fill="#131328"/>
+  <text x="190" y="89" font-family="Segoe UI" font-size="10" fill="#a09a8d">TEMPLATE:</text>
+  <rect x="255" y="76" width="130" height="18" rx="4" fill="#0f0f1e" stroke="#2a2a55" stroke-width="0.8"/>
+  <text x="265" y="89" font-family="Segoe UI" font-size="10" fill="#ece5d8">Hall Effect</text>
+  <text x="375" y="89" font-family="Segoe UI" font-size="9" fill="#64748b">▼</text>
+
+  <rect x="405" y="76" width="80" height="18" rx="4" fill="#c8a96e" opacity="0.15" stroke="#c8a96e" stroke-width="0.8"/>
+  <text x="445" y="89" text-anchor="middle" font-family="Segoe UI" font-size="10" font-weight="600" fill="#c8a96e">Save Preset</text>
+
+  <rect x="495" y="76" width="100" height="18" rx="4" fill="#0f0f1e" stroke="#2a2a55" stroke-width="0.8"/>
+  <text x="505" y="89" font-family="Segoe UI" font-size="10" fill="#a09a8d">— Presets —</text>
+
+  <!-- Metric cards -->
+  <g transform="translate(185, 105)">
+    <rect width="110" height="55" rx="6" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+    <rect width="3" height="55" rx="1.5" fill="#4cc2ff"/>
+    <text x="14" y="16" font-family="Segoe UI" font-size="9" fill="#64748b">VOLTAGE</text>
+    <text x="14" y="38" font-family="Courier" font-size="18" font-weight="700" fill="#4cc2ff">944.9<tspan font-size="10">m</tspan></text>
+    <text x="95" y="38" font-family="Segoe UI" font-size="9" fill="#64748b">V</text>
+    <text x="14" y="50" font-family="Segoe UI" font-size="8" fill="#22c55e">+5.1e-2 /step</text>
+  </g>
+  <g transform="translate(305, 105)">
+    <rect width="110" height="55" rx="6" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+    <rect width="3" height="55" rx="1.5" fill="#7bc639"/>
+    <text x="14" y="16" font-family="Segoe UI" font-size="9" fill="#64748b">CURRENT</text>
+    <text x="14" y="38" font-family="Courier" font-size="18" font-weight="700" fill="#7bc639">938.3<tspan font-size="10">μ</tspan></text>
+    <text x="100" y="38" font-family="Segoe UI" font-size="9" fill="#64748b">A</text>
+  </g>
+  <g transform="translate(425, 105)">
+    <rect width="110" height="55" rx="6" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+    <rect width="3" height="55" rx="1.5" fill="#9cf0ff"/>
+    <text x="14" y="16" font-family="Segoe UI" font-size="9" fill="#64748b">RESISTANCE</text>
+    <text x="14" y="38" font-family="Courier" font-size="18" font-weight="700" fill="#9cf0ff">1.247<tspan font-size="10">k</tspan></text>
+    <text x="100" y="38" font-family="Segoe UI" font-size="9" fill="#64748b">Ω</text>
+  </g>
+  <g transform="translate(545, 105)">
+    <rect width="110" height="55" rx="6" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+    <rect width="3" height="55" rx="1.5" fill="#f0b232"/>
+    <text x="14" y="16" font-family="Segoe UI" font-size="9" fill="#64748b">TEMPERATURE</text>
+    <text x="14" y="38" font-family="Courier" font-size="18" font-weight="700" fill="#f0b232">300.2</text>
+    <text x="100" y="38" font-family="Segoe UI" font-size="9" fill="#64748b">K</text>
+  </g>
+  <g transform="translate(665, 105)">
+    <rect width="110" height="55" rx="6" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+    <rect width="3" height="55" rx="1.5" fill="#ff6b4a"/>
+    <text x="14" y="16" font-family="Segoe UI" font-size="9" fill="#64748b">FIELD</text>
+    <text x="14" y="38" font-family="Courier" font-size="18" font-weight="700" fill="#ff6b4a">4.09<tspan font-size="10">k</tspan></text>
+    <text x="95" y="38" font-family="Segoe UI" font-size="9" fill="#64748b">Oe</text>
+  </g>
+
+  <!-- Chart 1 -->
+  <rect x="185" y="170" width="350" height="150" rx="8" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+  <text x="195" y="186" font-family="Segoe UI" font-size="10" font-weight="600" fill="#ece5d8">CHART 1</text>
+  <text x="280" y="186" font-family="Segoe UI" font-size="9" fill="#64748b">X: Time (s) ▼  Y: Voltage (V) ▼</text>
+  <!-- Sine wave -->
+  <polyline points="200,280 220,265 240,240 260,220 280,215 300,225 320,245 340,265 360,275 380,270 400,255 420,235 440,220 460,218 480,228 500,250 520,270" fill="none" stroke="#4cc2ff" stroke-width="2"/>
+  <!-- Grid -->
+  <line x1="195" y1="230" x2="525" y2="230" stroke="#2a2a55" stroke-width="0.5"/>
+  <line x1="195" y1="260" x2="525" y2="260" stroke="#2a2a55" stroke-width="0.5"/>
+  <line x1="360" y1="195" x2="360" y2="310" stroke="#2a2a55" stroke-width="0.5"/>
+  <!-- Latest dot -->
+  <circle cx="520" cy="270" r="3" fill="#22c55e"/>
+
+  <!-- Chart 2 -->
+  <rect x="545" y="170" width="345" height="150" rx="8" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+  <text x="555" y="186" font-family="Segoe UI" font-size="10" font-weight="600" fill="#ece5d8">CHART 2</text>
+  <text x="640" y="186" font-family="Segoe UI" font-size="9" fill="#64748b">X: Field (Oe) ▼  Y: Hall V (V) ▼</text>
+  <!-- Hall curve -->
+  <polyline points="560,300 580,295 600,285 620,270 640,250 660,230 680,225 700,228 720,240 740,255 760,270 780,282 800,290 820,296 840,298 860,300" fill="none" stroke="#59c9a5" stroke-width="2"/>
+  <line x1="555" y1="260" x2="880" y2="260" stroke="#2a2a55" stroke-width="0.5"/>
+  <line x1="720" y1="195" x2="720" y2="310" stroke="#2a2a55" stroke-width="0.5"/>
+  <circle cx="860" cy="300" r="3" fill="#22c55e"/>
+
+  <!-- Chart 3 -->
+  <rect x="185" y="330" width="350" height="150" rx="8" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+  <text x="195" y="346" font-family="Segoe UI" font-size="10" font-weight="600" fill="#ece5d8">CHART 3</text>
+  <text x="280" y="346" font-family="Segoe UI" font-size="9" fill="#64748b">X: Time (s) ▼  Y: Resistance (Ω) ▼</text>
+  <!-- Rising curve -->
+  <polyline points="200,460 230,455 260,445 290,430 320,410 350,395 380,385 410,380 440,378 470,377 500,376 520,376" fill="none" stroke="#9cf0ff" stroke-width="2"/>
+  <line x1="195" y1="410" x2="525" y2="410" stroke="#2a2a55" stroke-width="0.5"/>
+  <circle cx="520" cy="376" r="3" fill="#22c55e"/>
+
+  <!-- Chart 4 -->
+  <rect x="545" y="330" width="345" height="150" rx="8" fill="#151530" stroke="#2a2a55" stroke-width="0.8"/>
+  <text x="555" y="346" font-family="Segoe UI" font-size="10" font-weight="600" fill="#ece5d8">CHART 4</text>
+  <text x="640" y="346" font-family="Segoe UI" font-size="9" fill="#64748b">X: Temp (K) ▼  Y: Power (W) ▼</text>
+  <!-- Exponential decay -->
+  <polyline points="560,370 590,375 620,385 650,400 680,420 710,435 740,448 770,455 800,458 830,460 860,461" fill="none" stroke="#f0b232" stroke-width="2"/>
+  <line x1="555" y1="420" x2="880" y2="420" stroke="#2a2a55" stroke-width="0.5"/>
+  <circle cx="860" cy="461" r="3" fill="#22c55e"/>
+
+  <!-- + Add Panel button -->
+  <rect x="795" y="488" width="95" height="6" rx="3" fill="#059669" opacity="0.15"/>
+  <text x="842" y="496" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#059669">+ Add Panel</text>
+</svg>
