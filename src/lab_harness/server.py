@@ -129,6 +129,64 @@ async def validate_plan(plan_json: str) -> dict:
 
 
 @mcp.tool()
+async def search_literature(
+    measurement_type: str,
+    sample_description: str = "",
+) -> dict:
+    """Search literature for measurement protocol references.
+
+    Queries the paper-pilot MCP server for published protocols,
+    instrument settings, and field/current ranges relevant to the
+    requested measurement type.
+
+    Args:
+        measurement_type: Type of measurement (e.g., "AHE", "MR", "SOT", "IV", "RT", "CV").
+        sample_description: Optional sample details (e.g., "CoFeB/MgO bilayer").
+    """
+    from lab_harness.literature.paper_pilot_client import PaperPilotClient
+
+    client = PaperPilotClient()
+    ctx = await client.search_for_protocol(measurement_type, sample_description)
+    return ctx.model_dump()
+
+
+@mcp.tool()
+async def analyze_data(
+    data_path: str,
+    measurement_type: str,
+    output_dir: str = "./data/analysis",
+) -> dict:
+    """Analyze measurement data using built-in templates.
+
+    Generates an analysis script from a template, executes it,
+    and returns extracted values and figure paths.
+
+    Args:
+        data_path: Path to the measurement data CSV file.
+        measurement_type: Type of measurement (AHE, MR, IV, RT).
+        output_dir: Directory for output scripts and figures.
+    """
+    from pathlib import Path as _Path
+
+    from lab_harness.analysis.analyzer import Analyzer
+
+    analyzer = Analyzer(output_dir=_Path(output_dir))
+    dp = _Path(data_path)
+    if not dp.exists():
+        return {"error": f"Data file not found: {data_path}"}
+
+    try:
+        script = analyzer.generate_script(dp, measurement_type)
+        script_path = analyzer.save_script(script, measurement_type.lower())
+        result = analyzer.run_script(script_path)
+        return result.model_dump()
+    except FileNotFoundError as exc:
+        return {"error": str(exc)}
+    except RuntimeError as exc:
+        return {"error": str(exc)}
+
+
+@mcp.tool()
 async def healthcheck() -> dict:
     """Check Lab Harness system status.
 
