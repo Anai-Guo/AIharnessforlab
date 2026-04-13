@@ -138,14 +138,43 @@ labharness serve
 
 Exposes 8 tools: `scan_instruments`, `classify_lab_instruments`, `propose_measurement`, `validate_plan`, `search_literature`, `analyze_data`, `generate_skill`, `healthcheck`
 
+## Compared to Alternatives
+
+| | AI Harness for Lab | LabVIEW | PyMeasure | Custom Scripts |
+|---|---|---|---|---|
+| **AI-guided** | Yes (6 providers) | No | No | No |
+| **Setup time** | Minutes | Weeks | Hours | Days |
+| **Safety checks** | 3-tier auto | Manual | None | Manual |
+| **New measurements** | AI generates | Rebuild | Code it | Code it |
+| **Literature search** | Built-in | No | No | No |
+| **Cost** | Free & open source | $$$$ license | Free | Free |
+| **Learning curve** | Natural language | Steep | Moderate | Steep |
+
+## Roadmap
+
+- [x] 40+ measurement templates across 8 disciplines
+- [x] AI-powered instrument classification, parameter optimization, safety advisory
+- [x] Agent loop with tool calling and experiment memory
+- [x] MCP server for Claude Code / Cursor integration
+- [ ] Real-time measurement execution (PyMeasure driver integration)
+- [ ] Web dashboard for remote monitoring
+- [ ] Community template marketplace
+- [ ] PyPI package release
+
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+We're building the future of AI-powered laboratory automation, and we need your help. Whether you're a physicist, chemist, biologist, or materials scientist — your measurement templates and instrument drivers make this project better for everyone.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup and [CATALOG.md](CATALOG.md) for the full template catalog.
 
 ## Acknowledgments
 
 - Measurement procedures adapted from [PICA](https://github.com/prathameshnium/PICA-Python-Instrument-Control-and-Automation) (MIT License, UGC-DAE CSR Mumbai)
 - Agent architecture inspired by [Hermes Agent](https://github.com/nousresearch/hermes-agent) patterns
+
+## Star History
+
+If this project helps your research, please give it a star! It helps other researchers discover it.
 
 ## License
 
