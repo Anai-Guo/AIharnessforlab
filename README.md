@@ -52,6 +52,12 @@ labharness literature AHE --sample "CoFeB/MgO"
 # Analyze data with AI interpretation
 labharness analyze data.csv --type AHE --interpret
 
+# Generate a new measurement protocol with AI
+labharness generate-skill MR --sample "Fe/MgO"
+
+# List PICA reference measurement procedures
+labharness procedures
+
 # Interactive AI chat for guided measurements
 labharness chat
 
