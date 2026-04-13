@@ -120,6 +120,12 @@ async def dashboard():
     return _embedded_dashboard()
 
 
+@app.get("/monitor", response_class=HTMLResponse)
+async def monitor_page():
+    """Serve the multi-panel monitor with user-selectable axes."""
+    return _embedded_monitor()
+
+
 def _embedded_dashboard() -> str:
     """Embedded HTML dashboard — no external files needed."""
     return '''<!DOCTYPE html>
@@ -350,9 +356,274 @@ fetch("/api/health").then(r=>r.json()).then(d=>{
 </html>'''
 
 
+def _embedded_monitor() -> str:
+    """Embedded multi-panel real-time monitor with selectable axes."""
+    return '''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Harness for Lab — Monitor</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+.header { background: linear-gradient(135deg, #1e1b4b, #312e81); padding: 16px 24px; border-bottom: 2px solid #4f46e5; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 20px; } .header h1 span { color: #a78bfa; }
+.header a { color: #94a3b8; text-decoration: none; font-size: 13px; }
+.header a:hover { color: #e2e8f0; }
+.toolbar { background: #1e293b; padding: 10px 24px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid #334155; }
+.toolbar label { font-size: 12px; color: #94a3b8; }
+.toolbar select, .toolbar input { background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 5px 10px; color: #e2e8f0; font-size: 13px; }
+.toolbar button { background: #6366f1; border: none; border-radius: 6px; padding: 6px 16px; color: white; font-size: 13px; cursor: pointer; font-weight: 600; }
+.toolbar button:hover { background: #4f46e5; }
+.toolbar .btn-add { background: #059669; } .toolbar .btn-add:hover { background: #047857; }
+.panels { display: grid; gap: 12px; padding: 16px; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+.panel { background: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow: hidden; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0f172a; border-bottom: 1px solid #334155; }
+.panel-header h3 { font-size: 13px; font-weight: 600; }
+.panel-controls { display: flex; gap: 8px; align-items: center; }
+.panel-controls select { background: #1e293b; border: 1px solid #475569; border-radius: 4px; padding: 3px 8px; color: #e2e8f0; font-size: 11px; }
+.panel-controls .btn-close { background: none; border: none; color: #64748b; cursor: pointer; font-size: 16px; }
+.panel-controls .btn-close:hover { color: #ef4444; }
+.canvas-wrap { padding: 12px; height: 280px; position: relative; }
+canvas { width: 100%; height: 100%; background: #0f172a; border-radius: 6px; }
+.panel-footer { padding: 6px 14px; background: #0f172a; border-top: 1px solid #334155; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; }
+.value-display { font-family: 'Courier New', monospace; font-size: 13px; color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><span>AI</span> Harness — Monitor</h1>
+  <a href="/">← Back to Dashboard</a>
+</div>
+<div class="toolbar">
+  <label>Panels:</label>
+  <button class="btn-add" onclick="addPanel()">+ Add Panel</button>
+  <label style="margin-left:16px;">Refresh:</label>
+  <select id="refreshRate">
+    <option value="1000">1 Hz</option>
+    <option value="500">2 Hz</option>
+    <option value="2000">0.5 Hz</option>
+    <option value="5000">0.2 Hz</option>
+  </select>
+  <label style="margin-left:16px;">Data Points:</label>
+  <input type="number" id="maxPoints" value="200" min="50" max="2000" style="width:70px;">
+  <button onclick="clearAllData()" style="background:#dc2626;margin-left:auto;">Clear All</button>
+</div>
+<div class="panels" id="panels"></div>
+
+<script>
+const CHANNELS = [
+  {id:"time", label:"Time", unit:"s"},
+  {id:"voltage", label:"Voltage", unit:"V"},
+  {id:"current", label:"Current", unit:"A"},
+  {id:"resistance", label:"Resistance", unit:"Ω"},
+  {id:"temperature", label:"Temperature", unit:"K"},
+  {id:"field", label:"Magnetic Field", unit:"Oe"},
+  {id:"capacitance", label:"Capacitance", unit:"pF"},
+  {id:"frequency", label:"Frequency", unit:"Hz"},
+  {id:"magnetization", label:"Magnetization", unit:"emu"},
+  {id:"power", label:"Power", unit:"W"},
+  {id:"strain", label:"Strain", unit:"με"},
+  {id:"pressure", label:"Pressure", unit:"Torr"},
+  {id:"ph", label:"pH", unit:""},
+  {id:"impedance_real", label:"Z Real", unit:"Ω"},
+  {id:"impedance_imag", label:"Z Imaginary", unit:"Ω"},
+  {id:"hall_voltage", label:"Hall Voltage", unit:"V"},
+  {id:"seebeck_voltage", label:"Seebeck Voltage", unit:"μV"},
+];
+
+let panelCount = 0;
+let panels = {};
+
+function channelOptions(selected="") {
+  return CHANNELS.map(c =>
+    `<option value="${c.id}" ${c.id===selected?"selected":""}>${c.label} (${c.unit})</option>`
+  ).join("");
+}
+
+function addPanel(xDefault="time", yDefault="voltage") {
+  panelCount++;
+  const id = "p" + panelCount;
+  const container = document.getElementById("panels");
+  const div = document.createElement("div");
+  div.className = "panel";
+  div.id = id;
+  div.innerHTML = `
+    <div class="panel-header">
+      <h3>Panel ${panelCount}</h3>
+      <div class="panel-controls">
+        <label style="font-size:11px;color:#94a3b8;">X:</label>
+        <select onchange="updateAxis('${id}')" id="${id}_x">${channelOptions(xDefault)}</select>
+        <label style="font-size:11px;color:#94a3b8;">Y:</label>
+        <select onchange="updateAxis('${id}')" id="${id}_y">${channelOptions(yDefault)}</select>
+        <button class="btn-close" onclick="removePanel('${id}')">&times;</button>
+      </div>
+    </div>
+    <div class="canvas-wrap"><canvas id="${id}_canvas"></canvas></div>
+    <div class="panel-footer">
+      <span id="${id}_info">No data</span>
+      <span class="value-display" id="${id}_value">--</span>
+    </div>
+  `;
+  container.appendChild(div);
+  panels[id] = { data: [], xCh: xDefault, yCh: yDefault };
+  initCanvas(id);
+}
+
+function removePanel(id) {
+  document.getElementById(id)?.remove();
+  delete panels[id];
+}
+
+function updateAxis(id) {
+  const xSel = document.getElementById(id+"_x");
+  const ySel = document.getElementById(id+"_y");
+  if (panels[id]) {
+    panels[id].xCh = xSel.value;
+    panels[id].yCh = ySel.value;
+    panels[id].data = [];
+    drawPanel(id);
+  }
+}
+
+function clearAllData() {
+  for (const id in panels) { panels[id].data = []; drawPanel(id); }
+}
+
+function initCanvas(id) {
+  const canvas = document.getElementById(id+"_canvas");
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width - 24;
+  canvas.height = rect.height - 24;
+  drawPanel(id);
+}
+
+function drawPanel(id) {
+  const panel = panels[id];
+  if (!panel) return;
+  const canvas = document.getElementById(id+"_canvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  const pad = {t:20, r:20, b:35, l:55};
+
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0, 0, w, h);
+
+  const data = panel.data;
+  const xLabel = CHANNELS.find(c=>c.id===panel.xCh)?.label || panel.xCh;
+  const yLabel = CHANNELS.find(c=>c.id===panel.yCh)?.label || panel.yCh;
+  const xUnit = CHANNELS.find(c=>c.id===panel.xCh)?.unit || "";
+  const yUnit = CHANNELS.find(c=>c.id===panel.yCh)?.unit || "";
+
+  // Axis labels
+  ctx.fillStyle = "#64748b"; ctx.font = "11px Segoe UI";
+  ctx.textAlign = "center";
+  ctx.fillText(`${xLabel} (${xUnit})`, pad.l + (w-pad.l-pad.r)/2, h - 5);
+  ctx.save(); ctx.translate(12, pad.t + (h-pad.t-pad.b)/2);
+  ctx.rotate(-Math.PI/2); ctx.fillText(`${yLabel} (${yUnit})`, 0, 0);
+  ctx.restore();
+
+  if (data.length < 2) {
+    ctx.fillStyle = "#475569"; ctx.font = "14px Segoe UI"; ctx.textAlign = "center";
+    ctx.fillText("Waiting for data...", w/2, h/2);
+    // Draw grid anyway
+    ctx.strokeStyle = "#1e293b"; ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const y = pad.t + i * (h-pad.t-pad.b)/4;
+      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(w-pad.r, y); ctx.stroke();
+      const x = pad.l + i * (w-pad.l-pad.r)/4;
+      ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, h-pad.b); ctx.stroke();
+    }
+    return;
+  }
+
+  const xs = data.map(d=>d.x), ys = data.map(d=>d.y);
+  let xMin = Math.min(...xs), xMax = Math.max(...xs);
+  let yMin = Math.min(...ys), yMax = Math.max(...ys);
+  if (xMin === xMax) { xMin -= 1; xMax += 1; }
+  if (yMin === yMax) { yMin -= 1; yMax += 1; }
+  const xRange = xMax - xMin, yRange = yMax - yMin;
+
+  // Grid
+  ctx.strokeStyle = "#1e293b"; ctx.lineWidth = 1;
+  ctx.fillStyle = "#475569"; ctx.font = "10px Courier New"; ctx.textAlign = "right";
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + i * (h-pad.t-pad.b)/4;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(w-pad.r, y); ctx.stroke();
+    const val = yMax - i * yRange / 4;
+    ctx.fillText(val.toPrecision(3), pad.l - 5, y + 4);
+  }
+  ctx.textAlign = "center";
+  for (let i = 0; i <= 4; i++) {
+    const x = pad.l + i * (w-pad.l-pad.r)/4;
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, h-pad.b); ctx.stroke();
+    const val = xMin + i * xRange / 4;
+    ctx.fillText(val.toPrecision(3), x, h - pad.b + 14);
+  }
+
+  // Plot line
+  ctx.strokeStyle = "#6366f1"; ctx.lineWidth = 2; ctx.beginPath();
+  for (let i = 0; i < data.length; i++) {
+    const px = pad.l + (data[i].x - xMin) / xRange * (w - pad.l - pad.r);
+    const py = pad.t + (1 - (data[i].y - yMin) / yRange) * (h - pad.t - pad.b);
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  // Latest point dot
+  const last = data[data.length - 1];
+  const lpx = pad.l + (last.x - xMin) / xRange * (w - pad.l - pad.r);
+  const lpy = pad.t + (1 - (last.y - yMin) / yRange) * (h - pad.t - pad.b);
+  ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(lpx, lpy, 4, 0, Math.PI*2); ctx.fill();
+
+  // Update footer
+  const info = document.getElementById(id+"_info");
+  const value = document.getElementById(id+"_value");
+  if (info) info.textContent = `${data.length} points | X: [${xMin.toPrecision(3)}, ${xMax.toPrecision(3)}]`;
+  if (value) value.textContent = `${yLabel}: ${last.y.toPrecision(5)} ${yUnit}`;
+}
+
+// Simulate data for demo
+function simulateData() {
+  const maxPts = parseInt(document.getElementById("maxPoints").value) || 200;
+  const t = Date.now() / 1000;
+  for (const id in panels) {
+    const p = panels[id];
+    const x = p.xCh === "time" ? t % 100 : (Math.random()-0.5)*200;
+    const y = Math.sin(t * 0.5) * (1 + Math.random()*0.1) + Math.random()*0.05;
+    p.data.push({x, y});
+    if (p.data.length > maxPts) p.data.shift();
+    drawPanel(id);
+  }
+}
+
+// Start with 2 default panels
+addPanel("time", "voltage");
+addPanel("field", "resistance");
+
+// Refresh loop
+let simInterval = setInterval(simulateData, 1000);
+document.getElementById("refreshRate").addEventListener("change", function() {
+  clearInterval(simInterval);
+  simInterval = setInterval(simulateData, parseInt(this.value));
+});
+
+// Resize handling
+window.addEventListener("resize", () => {
+  for (const id in panels) initCanvas(id);
+});
+</script>
+</body>
+</html>'''
+
+
 # CLI integration
 def run_web(host: str = "127.0.0.1", port: int = 8080):
     """Start the web GUI server."""
     import uvicorn
     print(f"Starting AI Harness for Lab at http://{host}:{port}")
+    print(f"  Dashboard: http://{host}:{port}/")
+    print(f"  Monitor:   http://{host}:{port}/monitor")
     uvicorn.run(app, host=host, port=port)
