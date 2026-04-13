@@ -67,14 +67,9 @@
   </text>
 
   <!-- Slogan -->
-  <rect x="230" y="115" width="340" height="40" rx="20" fill="url(#hg3)" opacity="0.9"/>
-  <text x="400" y="141" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="white" letter-spacing="2">
-    全自动实验助手
-  </text>
-
-  <!-- Subtitle -->
-  <text x="400" y="185" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#94A3B8">
-    Your Fully Automated Lab Assistant
+  <rect x="200" y="115" width="400" height="40" rx="20" fill="url(#hg3)" opacity="0.9"/>
+  <text x="400" y="142" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="white" letter-spacing="3">
+    FULLY AUTOMATED LAB ASSISTANT
   </text>
 
   <!-- Feature pills -->
