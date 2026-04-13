@@ -1,0 +1,75 @@
+name: Bug Report
+description: Something isn't working correctly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill in the details below.
+
+  - type: input
+    id: version
+    attributes:
+      label: LabAgent version
+      description: Run `labharness --version` or `pip show lab-agent`
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug clearly.
+      placeholder: "When I ran `labharness scan`, it crashed with..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: "I expected it to list my connected instruments."
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1. Run `labharness ...`
+        2.
+        3.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error output / logs
+      description: Paste any error messages here.
+      render: shell
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Which component?
+      options:
+        - Instrument scanning (discovery)
+        - Instrument classification
+        - Measurement planning
+        - Safety validation
+        - Data analysis
+        - Web GUI
+        - Terminal panel (TUI)
+        - MCP server
+        - CLI
+        - Other

@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask a question
+    url: https://github.com/Anai-Guo/LabAgent/discussions
+    about: Use Discussions for questions and general chat

@@ -1,0 +1,69 @@
+name: New Measurement Template
+description: Request support for a new measurement type
+labels: ["new-template"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want LabAgent to support a new measurement type? Tell us about it!
+        We currently have 46 templates across 9 disciplines.
+
+  - type: input
+    id: measurement-name
+    attributes:
+      label: Measurement name
+      placeholder: "e.g., AC susceptibility, Raman spectroscopy, TGA"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: discipline
+    attributes:
+      label: Discipline
+      options:
+        - Physics
+        - Chemistry / Electrochemistry
+        - Materials Science
+        - Semiconductor
+        - Biology / Biosensors
+        - Thermoelectric
+        - Superconductivity
+        - Dielectric / Ferroelectric
+        - Environmental / Sensors
+        - Quantum Design (PPMS/MPMS)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What does this measurement do?
+      placeholder: "Sweeps X while measuring Y to determine Z..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: instruments
+    attributes:
+      label: What instruments are used?
+      placeholder: |
+        - Source: Keithley 2400 (source current)
+        - Measure: Keithley 2182A (measure voltage)
+        - Control: Lakeshore 335 (temperature)
+
+  - type: textarea
+    id: parameters
+    attributes:
+      label: Typical parameter ranges
+      placeholder: |
+        - X axis: Temperature, 2-400 K, step 1 K
+        - Y axis: Resistance (Ohm)
+        - Source current: 10 µA
+        - Settling time: 2 s
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Reference papers or manuals (optional)
+      placeholder: "DOI, URL, or description of measurement protocol"
