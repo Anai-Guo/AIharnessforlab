@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <defs>
+    <linearGradient id="hg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5"/><stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="hg2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06B6D4"/><stop offset="100%" style="stop-color:#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="hg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/><stop offset="100%" style="stop-color:#EF4444"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark background -->
+  <rect width="800" height="300" rx="16" fill="#0F172A"/>
+
+  <!-- Decorative circuit lines -->
+  <g opacity="0.08" stroke="#818CF8" stroke-width="1" fill="none">
+    <path d="M0 50 H200 L220 70 H350"/>
+    <path d="M0 100 H100 L120 120 H280 L300 100 H450"/>
+    <path d="M450 200 H600 L620 220 H800"/>
+    <path d="M500 250 H650 L670 230 H800"/>
+    <circle cx="200" cy="50" r="3" fill="#818CF8"/>
+    <circle cx="350" cy="70" r="3" fill="#818CF8"/>
+    <circle cx="280" cy="120" r="3" fill="#818CF8"/>
+    <circle cx="450" cy="100" r="3" fill="#818CF8"/>
+    <circle cx="600" cy="200" r="3" fill="#818CF8"/>
+  </g>
+
+  <!-- Left side: AI Brain + Instruments -->
+  <g transform="translate(60, 55)">
+    <!-- Brain -->
+    <path d="M50 15 C32 15 20 28 20 45 C20 53 24 60 30 64 L30 78 C30 82 33 86 38 86 L62 86 C67 86 70 82 70 78 L70 64 C76 60 80 53 80 45 C80 28 68 15 50 15Z" fill="none" stroke="url(#hg1)" stroke-width="2.5"/>
+    <circle cx="40" cy="37" r="3.5" fill="#818CF8"/>
+    <circle cx="60" cy="37" r="3.5" fill="#818CF8"/>
+    <circle cx="50" cy="50" r="3.5" fill="#A78BFA"/>
+    <circle cx="38" cy="60" r="2.5" fill="#C4B5FD"/>
+    <circle cx="62" cy="60" r="2.5" fill="#C4B5FD"/>
+    <line x1="40" y1="37" x2="50" y2="50" stroke="#818CF8" stroke-width="1.2" opacity="0.5"/>
+    <line x1="60" y1="37" x2="50" y2="50" stroke="#818CF8" stroke-width="1.2" opacity="0.5"/>
+    <line x1="50" y1="50" x2="38" y2="60" stroke="#A78BFA" stroke-width="1.2" opacity="0.5"/>
+    <line x1="50" y1="50" x2="62" y2="60" stroke="#A78BFA" stroke-width="1.2" opacity="0.5"/>
+
+    <!-- Connection beam to instruments -->
+    <path d="M80 45 C100 45 100 20 120 20" stroke="url(#hg2)" stroke-width="1.5" fill="none" stroke-dasharray="4 2"/>
+    <path d="M80 45 C100 45 100 45 120 45" stroke="url(#hg2)" stroke-width="1.5" fill="none" stroke-dasharray="4 2"/>
+    <path d="M80 45 C100 45 100 70 120 70" stroke="url(#hg2)" stroke-width="1.5" fill="none" stroke-dasharray="4 2"/>
+
+    <!-- Instrument icons -->
+    <!-- Keithley -->
+    <rect x="120" y="10" width="28" height="20" rx="3" fill="#1E293B" stroke="#3B82F6" stroke-width="1.2"/>
+    <text x="134" y="24" text-anchor="middle" font-family="Courier, monospace" font-size="7" fill="#3B82F6">K24</text>
+    <!-- Multimeter -->
+    <rect x="120" y="35" width="28" height="20" rx="3" fill="#1E293B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="134" y="49" text-anchor="middle" font-family="Courier, monospace" font-size="7" fill="#10B981">DMM</text>
+    <!-- Gaussmeter -->
+    <rect x="120" y="60" width="28" height="20" rx="3" fill="#1E293B" stroke="#F59E0B" stroke-width="1.2"/>
+    <text x="134" y="74" text-anchor="middle" font-family="Courier, monospace" font-size="7" fill="#F59E0B">MAG</text>
+
+    <!-- Pulse line -->
+    <polyline points="25,100 35,100 38,90 42,110 46,85 50,108 54,95 58,100 75,100" fill="none" stroke="url(#hg2)" stroke-width="2"/>
+  </g>
+
+  <!-- Center: Main text -->
+  <text x="400" y="95" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="48" font-weight="800" fill="white">
+    <tspan fill="url(#hg1)">AI</tspan> Harness <tspan fill="#94A3B8" font-weight="300">for</tspan> Lab
+  </text>
+
+  <!-- Slogan -->
+  <rect x="230" y="115" width="340" height="40" rx="20" fill="url(#hg3)" opacity="0.9"/>
+  <text x="400" y="141" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="white" letter-spacing="2">
+    全自动实验助手
+  </text>
+
+  <!-- Subtitle -->
+  <text x="400" y="185" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#94A3B8">
+    Your Fully Automated Lab Assistant
+  </text>
+
+  <!-- Feature pills -->
+  <rect x="115" y="210" width="100" height="28" rx="14" fill="#1E293B" stroke="#4F46E5" stroke-width="1"/>
+  <text x="165" y="229" text-anchor="middle" font-family="Segoe UI, Arial" font-size="10" fill="#A78BFA">AI Analysis</text>
+
+  <rect x="230" y="210" width="110" height="28" rx="14" fill="#1E293B" stroke="#059669" stroke-width="1"/>
+  <text x="285" y="229" text-anchor="middle" font-family="Segoe UI, Arial" font-size="10" fill="#34D399">Auto Discovery</text>
+
+  <rect x="355" y="210" width="100" height="28" rx="14" fill="#1E293B" stroke="#D97706" stroke-width="1"/>
+  <text x="405" y="229" text-anchor="middle" font-family="Segoe UI, Arial" font-size="10" fill="#FCD34D">Safety First</text>
+
+  <rect x="470" y="210" width="100" height="28" rx="14" fill="#1E293B" stroke="#DC2626" stroke-width="1"/>
+  <text x="520" y="229" text-anchor="middle" font-family="Segoe UI, Arial" font-size="10" fill="#FCA5A5">6 AI Models</text>
+
+  <rect x="585" y="210" width="110" height="28" rx="14" fill="#1E293B" stroke="#06B6D4" stroke-width="1"/>
+  <text x="640" y="229" text-anchor="middle" font-family="Segoe UI, Arial" font-size="10" fill="#67E8F9">Lab Memory</text>
+
+  <!-- Bottom tagline -->
+  <text x="400" y="275" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#475569">
+    From research question to publication-ready data — guided by AI at every step
+  </text>
+</svg>

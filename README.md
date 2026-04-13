@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="AI Harness for Lab" width="500">
+  <img src="assets/hero.svg" alt="AI Harness for Lab — 全自动实验助手" width="700">
 </p>
 
 <p align="center">
@@ -8,10 +8,6 @@
   <img src="https://img.shields.io/badge/tests-88%20passed-brightgreen.svg" alt="Tests">
   <img src="https://img.shields.io/badge/AI%20models-6%20providers-purple.svg" alt="Models">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
-</p>
-
-<p align="center">
-  <b>Connect AI to your lab instruments.<br>From research question to publication-ready data.</b>
 </p>
 
 ---
