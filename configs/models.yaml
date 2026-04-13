@@ -1,25 +1,73 @@
 # Lab Harness - Model Configuration
-# Choose your AI backend by uncommenting the desired provider.
+# Uncomment your preferred provider or set via environment variables.
 
+# ============================================================
+# RECOMMENDED PRESETS
+# ============================================================
+
+# --- Best Quality (Cloud) ---
+# provider: "anthropic"
+# model: "claude-sonnet-4-20250514"    # Best for physics reasoning
+
+# --- Best Value (Cloud) ---
+# provider: "openai"
+# model: "gpt-4o-mini"                 # Fast and cheap
+
+# --- Privacy-First (Local) ---
+# provider: "ollama"
+# model: "qwen3:32b"                   # Best local model for science
+# base_url: "http://localhost:11434"
+
+# --- High-End Local ---
+# provider: "ollama"
+# model: "llama3.3:70b"                # Needs 48GB+ VRAM
+# base_url: "http://localhost:11434"
+
+# ============================================================
+# ACTIVE CONFIGURATION
+# ============================================================
 model:
-  # --- Cloud Models ---
   provider: "anthropic"
   model: "claude-sonnet-4-20250514"
   # api_key: "sk-..."  # Or set LABHARNESS_API_KEY env var
-
-  # --- OpenAI ---
-  # provider: "openai"
-  # model: "gpt-4o"
-
-  # --- Local Models (Ollama) ---
-  # provider: "ollama"
-  # model: "qwen3:32b"
-  # base_url: "http://localhost:11434"
-
-  # --- Local Models (vLLM) ---
-  # provider: "openai"  # vLLM uses OpenAI-compatible API
-  # model: "Qwen/Qwen2.5-32B-Instruct"
-  # base_url: "http://localhost:8000/v1"
-
   temperature: 0.0
   max_tokens: 4096
+
+# --- Alternative Providers (uncomment to switch) ---
+
+# OpenAI GPT-4o
+# model:
+#   provider: "openai"
+#   model: "gpt-4o"
+#   temperature: 0.0
+#   max_tokens: 4096
+
+# Google Gemini
+# model:
+#   provider: "gemini"
+#   model: "gemini/gemini-2.5-flash"
+#   temperature: 0.0
+#   max_tokens: 4096
+
+# Ollama (Local)
+# model:
+#   provider: "ollama"
+#   model: "qwen3:32b"
+#   base_url: "http://localhost:11434"
+#   temperature: 0.0
+#   max_tokens: 4096
+
+# vLLM (Local, OpenAI-compatible)
+# model:
+#   provider: "openai"
+#   model: "Qwen/Qwen2.5-32B-Instruct"
+#   base_url: "http://localhost:8000/v1"
+#   temperature: 0.0
+#   max_tokens: 4096
+
+# DeepSeek
+# model:
+#   provider: "deepseek"
+#   model: "deepseek/deepseek-chat"
+#   temperature: 0.0
+#   max_tokens: 4096

@@ -199,6 +199,41 @@ async def analyze_data(
 
 
 @mcp.tool()
+async def generate_skill(
+    measurement_type: str,
+    sample_description: str = "",
+) -> dict:
+    """Generate and save a new measurement protocol skill using AI.
+
+    Creates a markdown skill file with YAML frontmatter describing
+    a step-by-step measurement protocol for the given type.
+    Uses existing skills as examples for style consistency.
+
+    Args:
+        measurement_type: Type of measurement to generate a skill for
+            (e.g., "MR", "AHE", "SOT", "FMR").
+        sample_description: Optional sample context to tailor the protocol
+            (e.g., "Fe/MgO bilayer", "CoFeB thin film").
+    """
+    from lab_harness.skills.generator import generate_skill as _generate
+    from lab_harness.skills.generator import save_skill
+
+    try:
+        content = _generate(
+            measurement_type=measurement_type,
+            sample_description=sample_description,
+        )
+        path = save_skill(measurement_type, content)
+        return {
+            "measurement_type": measurement_type,
+            "skill_path": str(path),
+            "content": content,
+        }
+    except RuntimeError as exc:
+        return {"error": str(exc)}
+
+
+@mcp.tool()
 async def healthcheck() -> dict:
     """Check Lab Harness system status.
 

@@ -47,6 +47,7 @@ class ValidationResult(BaseModel):
     decision: Decision
     violations: list[BoundaryViolation] = []
     warnings: list[str] = []
+    ai_advice: str = ""
 
     @property
     def is_safe(self) -> bool:

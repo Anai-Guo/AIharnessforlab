@@ -51,10 +51,30 @@ def _collect_required_roles(template: dict) -> set[str]:
     return roles
 
 
+def _clamp_ai_overrides(ai_overrides: dict, template: dict) -> None:
+    """Clamp AI-suggested overrides so they never exceed template safety limits.
+
+    Modifies *ai_overrides* in place: any value that would exceed the
+    corresponding template maximum is dropped.
+    """
+    safety_keys = ("max_current_a", "max_voltage_v", "max_field_oe", "max_temperature_k")
+    for key in safety_keys:
+        if key in ai_overrides and key in template:
+            if ai_overrides[key] > template[key]:
+                logger.warning(
+                    "AI suggested %s=%.4g exceeds template limit %.4g; ignoring",
+                    key,
+                    ai_overrides[key],
+                    template[key],
+                )
+                del ai_overrides[key]
+
+
 def build_plan_from_template(
     measurement_type: str,
     overrides: dict | None = None,
     role_assignments: dict[str, Any] | None = None,
+    sample_description: str = "",
 ) -> MeasurementPlan:
     """Build a measurement plan from a template with optional overrides.
 
@@ -64,14 +84,41 @@ def build_plan_from_template(
         role_assignments: Optional mapping of role name to instrument info.
             When provided, validates that all required roles for the
             measurement type have assignments and logs warnings for missing ones.
+        sample_description: Optional sample/material info (e.g. "10nm CoFeB/MgO").
+            When provided and an LLM is configured, AI-suggested parameter
+            optimizations are merged before user overrides.
 
     Returns:
         A MeasurementPlan ready for validation and execution.
     """
     template = _load_template(measurement_type)
 
+    # AI-powered parameter optimization (applied before user overrides)
+    if sample_description:
+        try:
+            from lab_harness.planning.parameter_optimizer import optimize_parameters
+
+            ai_result = optimize_parameters(
+                measurement_type=measurement_type,
+                sample_description=sample_description,
+                current_params=template,
+            )
+            ai_overrides = ai_result.get("suggested_overrides", {})
+            if ai_overrides:
+                # Clamp AI suggestions to safety limits (never exceed template maximums)
+                _clamp_ai_overrides(ai_overrides, template)
+                for key, value in ai_overrides.items():
+                    if key in template and isinstance(template[key], dict) and isinstance(value, dict):
+                        template[key].update(value)
+                    else:
+                        template[key] = value
+                if reasoning := ai_result.get("reasoning"):
+                    logger.info("AI parameter optimization: %s", reasoning)
+        except Exception:
+            logger.debug("AI parameter optimization unavailable", exc_info=True)
+
     if overrides:
-        # Deep merge overrides
+        # Deep merge overrides (user overrides take precedence over AI)
         for key, value in overrides.items():
             if key in template and isinstance(template[key], dict) and isinstance(value, dict):
                 template[key].update(value)

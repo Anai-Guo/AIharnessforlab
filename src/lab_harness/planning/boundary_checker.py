@@ -37,6 +37,7 @@ def load_safety_policy(path: Path | None = None) -> SafetyPolicy:
 def check_boundaries(
     plan: MeasurementPlan,
     policy: SafetyPolicy | None = None,
+    sample_description: str = "",
 ) -> ValidationResult:
     """Validate a measurement plan against safety boundaries.
 
@@ -48,6 +49,9 @@ def check_boundaries(
     Args:
         plan: The measurement plan to validate.
         policy: Safety policy to check against. Uses defaults if not provided.
+        sample_description: Optional sample info for AI safety advice.
+            When provided and warnings are generated, an LLM is consulted
+            for context-aware safety advice stored in ``ValidationResult.ai_advice``.
 
     Returns:
         ValidationResult with decision and any violations.
@@ -153,8 +157,23 @@ def check_boundaries(
     else:
         decision = Decision.ALLOW
 
+    # AI safety advice when warnings are present and sample info is available
+    ai_advice = ""
+    if warnings and sample_description:
+        try:
+            from lab_harness.planning.safety_advisor import advise_on_warnings
+
+            ai_advice = advise_on_warnings(
+                warnings=warnings,
+                measurement_type=plan.measurement_type.value,
+                sample_description=sample_description,
+            )
+        except Exception:
+            logger.debug("AI safety advisor unavailable", exc_info=True)
+
     return ValidationResult(
         decision=decision,
         violations=violations,
         warnings=warnings,
+        ai_advice=ai_advice,
     )

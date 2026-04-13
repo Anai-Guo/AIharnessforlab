@@ -100,6 +100,21 @@ def cmd_analyze(args: argparse.Namespace, settings: Settings) -> None:
         print(f"\nAI Interpretation:\n{result.ai_interpretation}")
 
 
+def cmd_generate_skill(args: argparse.Namespace, settings: Settings) -> None:
+    """Generate a measurement protocol skill using AI."""
+    from lab_harness.skills.generator import generate_skill, save_skill
+
+    print(f"Generating skill for '{args.measurement_type}'...")
+    content = generate_skill(
+        measurement_type=args.measurement_type,
+        sample_description=args.sample or "",
+    )
+    print(f"\n{content}\n")
+
+    path = save_skill(args.measurement_type, content)
+    print(f"Saved to {path}")
+
+
 def cmd_chat(args: argparse.Namespace, settings: Settings) -> None:
     """Interactive chat with the Lab Harness agent."""
     import asyncio
@@ -125,6 +140,22 @@ def cmd_chat(args: argparse.Namespace, settings: Settings) -> None:
         pass
 
     print("Goodbye")
+
+
+def cmd_procedures(args: argparse.Namespace, settings: Settings) -> None:
+    """List PICA reference measurement procedures."""
+    from lab_harness.reference.instrument_procedures import PROCEDURES
+
+    print("Available reference procedures:\n")
+    for name, proc in PROCEDURES.items():
+        desc = proc["description"]
+        params = proc.get("parameters", {})
+        print(f"  {name}")
+        print(f"    {desc}")
+        if params:
+            param_str = ", ".join(f"{k}={v}" for k, v in params.items())
+            print(f"    Defaults: {param_str}")
+        print()
 
 
 def cmd_serve(args: argparse.Namespace, settings: Settings) -> None:
@@ -165,6 +196,11 @@ def main() -> None:
     p_lit.add_argument("measurement_type", help="Measurement type (AHE, MR, SOT, IV, RT, CV)")
     p_lit.add_argument("--sample", help="Sample description (e.g. 'CoFeB/MgO')")
 
+    # generate-skill
+    p_genskill = sub.add_parser("generate-skill", help="Generate a measurement skill using AI")
+    p_genskill.add_argument("measurement_type", help="Measurement type (e.g. MR, AHE, SOT)")
+    p_genskill.add_argument("--sample", help="Sample description (e.g. 'Fe/MgO')")
+
     # analyze
     p_analyze = sub.add_parser("analyze", help="Analyze measurement data")
     p_analyze.add_argument("data_file", help="Path to measurement data CSV file")
@@ -176,6 +212,9 @@ def main() -> None:
 
     # chat
     sub.add_parser("chat", help="Interactive chat with the agent")
+
+    # procedures
+    sub.add_parser("procedures", help="List PICA reference measurement procedures")
 
     # serve
     sub.add_parser("serve", help="Start MCP server")
@@ -191,7 +230,9 @@ def main() -> None:
         "classify": cmd_classify,
         "propose": cmd_propose,
         "literature": cmd_literature,
+        "generate-skill": cmd_generate_skill,
         "analyze": cmd_analyze,
+        "procedures": cmd_procedures,
         "chat": cmd_chat,
         "serve": cmd_serve,
     }
