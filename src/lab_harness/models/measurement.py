@@ -73,6 +73,15 @@ class MeasurementType(str, Enum):
     NERNST = "NERNST"  # Nernst effect (transverse thermoelectric)
     TUNNELING = "TUNNELING"  # Tunneling spectroscopy (dI/dV)
 
+    # --- Quantum Design PPMS ---
+    PPMS_RT = "PPMS_RT"  # PPMS Resistance vs Temperature
+    PPMS_MR = "PPMS_MR"  # PPMS Magnetoresistance
+    PPMS_HALL = "PPMS_HALL"  # PPMS Hall Effect
+    PPMS_HC = "PPMS_HC"  # PPMS Heat Capacity
+    # --- Quantum Design MPMS ---
+    MPMS_MH = "MPMS_MH"  # MPMS Magnetization vs Field
+    MPMS_MT = "MPMS_MT"  # MPMS Magnetization vs Temperature
+
     # --- General purpose ---
     CUSTOM_SWEEP = "CUSTOM_SWEEP"  # Generic user-defined sweep
     CUSTOM = "CUSTOM"

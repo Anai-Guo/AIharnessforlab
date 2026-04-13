@@ -1,0 +1,25 @@
+# PPMS Hall Effect measurement
+name: "PPMS Hall Effect"
+description: "Hall resistance vs field for carrier density and mobility using PPMS"
+
+x_axis:
+  label: "Magnetic Field"
+  unit: "Oe"
+  start: -90000.0
+  stop: 90000.0
+  step: 2000.0
+  role: "ppms"
+
+y_channels:
+  - label: "Hall Resistance"
+    unit: "Ohm"
+    role: "ppms"
+  - label: "Longitudinal Resistance"
+    unit: "Ohm"
+    role: "ppms"
+
+max_current_a: 0.001
+max_field_oe: 90000.0
+max_temperature_k: 400.0
+settling_time_s: 2.0
+num_averages: 3

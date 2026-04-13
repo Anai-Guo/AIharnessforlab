@@ -170,6 +170,10 @@ def test_measurement_type_values():
         "CAPACITANCE_FREQUENCY", "DLTS", "PHOTO_IV",
         # Additional Physics
         "MAGNETOSTRICTION", "NERNST", "TUNNELING",
+        # Quantum Design PPMS
+        "PPMS_RT", "PPMS_MR", "PPMS_HALL", "PPMS_HC",
+        # Quantum Design MPMS
+        "MPMS_MH", "MPMS_MT",
         # General purpose
         "CUSTOM_SWEEP", "CUSTOM",
     }

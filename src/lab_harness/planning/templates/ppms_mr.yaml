@@ -1,0 +1,22 @@
+# PPMS Magnetoresistance measurement
+name: "PPMS Magnetoresistance"
+description: "Field-dependent resistance measurement at fixed temperature using Quantum Design PPMS"
+
+x_axis:
+  label: "Magnetic Field"
+  unit: "Oe"
+  start: -90000.0
+  stop: 90000.0
+  step: 1000.0
+  role: "ppms"
+
+y_channels:
+  - label: "Resistance"
+    unit: "Ohm"
+    role: "ppms"
+
+max_current_a: 0.01
+max_field_oe: 90000.0
+max_temperature_k: 400.0
+settling_time_s: 1.0
+num_averages: 1

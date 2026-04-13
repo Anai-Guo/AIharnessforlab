@@ -135,6 +135,33 @@ A34401_MEASURE = [
     "READ?",  # Trigger and read
 ]
 
+# Quantum Design PPMS (via MultiPyVu)
+PPMS_INIT = [
+    "# pip install MultiPyVu",
+    "# import MultiPyVu as mpv",
+    "# client = mpv.Client()",
+    "# client.open()",
+]
+
+PPMS_TEMP_SEQUENCE = [
+    "client.set_temperature({setpoint}, {rate}, client.temperature.approach_mode.fast_settle)",
+    "client.wait_for(0, 0, client.subsystem.temperature)",  # Wait for stable
+    "temp, status = client.get_temperature()",
+]
+
+PPMS_FIELD_SEQUENCE = [
+    "client.set_field({field}, {rate}, client.field.approach_mode.linear, client.field.mode.persistent)",
+    "client.wait_for(0, 0, client.subsystem.field)",  # Wait for stable
+    "field, status = client.get_field()",
+]
+
+# Quantum Design MPMS3 (via MultiPyVu)
+MPMS_MEASURE = [
+    "client.set_field({field}, {rate})",
+    "client.wait_for(0, 0, client.subsystem.field)",
+    "# Read DC magnetization from MPMS data file",
+]
+
 # Measurement procedure templates
 PROCEDURES = {
     "IV_K2400": {
@@ -223,6 +250,60 @@ PROCEDURES = {
         "parameters": {
             "range": "10",  # V
             "nplc": "10",  # power line cycles
+        },
+    },
+    "PPMS_RT": {
+        "description": "R-T measurement with Quantum Design PPMS via MultiPyVu",
+        "init": PPMS_INIT,
+        "measure": PPMS_TEMP_SEQUENCE,
+        "parameters": {
+            "setpoint": "300",
+            "rate": "2",  # K/min
+        },
+    },
+    "PPMS_MR": {
+        "description": "Magnetoresistance measurement with Quantum Design PPMS",
+        "init": PPMS_INIT,
+        "measure": PPMS_FIELD_SEQUENCE,
+        "parameters": {
+            "field": "90000",  # Oe
+            "rate": "100",  # Oe/s
+        },
+    },
+    "PPMS_HALL": {
+        "description": "Hall effect measurement with Quantum Design PPMS",
+        "init": PPMS_INIT,
+        "measure": PPMS_FIELD_SEQUENCE,
+        "parameters": {
+            "field": "90000",  # Oe
+            "rate": "100",  # Oe/s
+        },
+    },
+    "PPMS_HC": {
+        "description": "Heat capacity measurement with Quantum Design PPMS",
+        "init": PPMS_INIT,
+        "measure": PPMS_TEMP_SEQUENCE,
+        "parameters": {
+            "setpoint": "300",
+            "rate": "2",  # K/min
+        },
+    },
+    "MPMS_MH": {
+        "description": "M-H loop measurement with Quantum Design MPMS/SQUID",
+        "init": PPMS_INIT,
+        "measure": MPMS_MEASURE,
+        "parameters": {
+            "field": "70000",  # Oe
+            "rate": "100",  # Oe/s
+        },
+    },
+    "MPMS_MT": {
+        "description": "M-T (ZFC/FC) measurement with Quantum Design MPMS/SQUID",
+        "init": PPMS_INIT,
+        "measure": PPMS_TEMP_SEQUENCE,
+        "parameters": {
+            "setpoint": "400",
+            "rate": "2",  # K/min
         },
     },
 }

@@ -63,6 +63,16 @@ Templates define what to measure. Located in `src/lab_harness/planning/templates
 | `gas_sensor.yaml` | Gas sensor response | DMM + gas controller |
 | `humidity_response.yaml` | Humidity sensor | DMM + humidity chamber |
 
+### Quantum Design PPMS/MPMS
+| Template | Description | Instruments |
+|----------|-------------|-------------|
+| `ppms_rt.yaml` | PPMS R-T (four-probe) | PPMS (MultiPyVu) |
+| `ppms_mr.yaml` | PPMS Magnetoresistance | PPMS (MultiPyVu) |
+| `ppms_hall.yaml` | PPMS Hall Effect | PPMS (MultiPyVu) |
+| `ppms_hc.yaml` | PPMS Heat Capacity | PPMS (MultiPyVu) |
+| `mpms_mh.yaml` | MPMS M-H Loop (SQUID) | MPMS (MultiPyVu) |
+| `mpms_mt.yaml` | MPMS M-T ZFC/FC | MPMS (MultiPyVu) |
+
 ### General Purpose
 | Template | Description | Instruments |
 |----------|-------------|-------------|
@@ -85,6 +95,12 @@ SCPI command sequences for common instruments. Located in `src/lab_harness/refer
 | `DMM_K2000` | Keithley 2000 | General voltage/resistance |
 | `LOCKIN_SR830` | SR830 | AC measurements, FMR |
 | `DMM_A34401` | Agilent 34401A | General purpose DMM |
+| `PPMS_RT` | QD PPMS (MultiPyVu) | R-T measurement |
+| `PPMS_MR` | QD PPMS (MultiPyVu) | Magnetoresistance |
+| `PPMS_HALL` | QD PPMS (MultiPyVu) | Hall effect |
+| `PPMS_HC` | QD PPMS (MultiPyVu) | Heat capacity |
+| `MPMS_MH` | QD MPMS (MultiPyVu) | M-H loop (SQUID) |
+| `MPMS_MT` | QD MPMS (MultiPyVu) | M-T ZFC/FC |
 
 ---
 

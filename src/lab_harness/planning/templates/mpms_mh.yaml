@@ -1,0 +1,21 @@
+# MPMS Magnetization vs Field (M-H loop)
+name: "MPMS M-H Loop"
+description: "DC magnetization measurement as a function of applied field using Quantum Design MPMS/SQUID"
+
+x_axis:
+  label: "Magnetic Field"
+  unit: "Oe"
+  start: -70000.0
+  stop: 70000.0
+  step: 1000.0
+  role: "mpms"
+
+y_channels:
+  - label: "DC Magnetization"
+    unit: "emu"
+    role: "mpms"
+
+max_field_oe: 70000.0
+max_temperature_k: 400.0
+settling_time_s: 3.0
+num_averages: 1

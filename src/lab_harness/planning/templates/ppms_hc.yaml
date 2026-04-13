@@ -1,0 +1,24 @@
+# PPMS Heat Capacity measurement
+name: "PPMS Heat Capacity"
+description: "Specific heat measurement as a function of temperature using PPMS relaxation method"
+
+x_axis:
+  label: "Temperature"
+  unit: "K"
+  start: 2.0
+  stop: 300.0
+  step: 2.0
+  role: "ppms"
+
+y_channels:
+  - label: "Heat Capacity"
+    unit: "J/mol-K"
+    role: "ppms"
+  - label: "Addenda"
+    unit: "J/mol-K"
+    role: "ppms"
+
+max_temperature_k: 400.0
+max_field_oe: 90000.0
+settling_time_s: 5.0
+num_averages: 1

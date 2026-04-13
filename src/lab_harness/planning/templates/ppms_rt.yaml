@@ -1,0 +1,25 @@
+# PPMS Resistance vs Temperature measurement
+name: "PPMS R-T Measurement"
+description: "Four-probe resistance measurement as a function of temperature using Quantum Design PPMS"
+
+x_axis:
+  label: "Temperature"
+  unit: "K"
+  start: 2.0
+  stop: 300.0
+  step: 1.0
+  role: "ppms"
+
+y_channels:
+  - label: "Resistance"
+    unit: "Ohm"
+    role: "ppms"
+  - label: "Magnetic Field"
+    unit: "Oe"
+    role: "ppms"
+
+max_current_a: 0.01
+max_temperature_k: 400.0
+max_field_oe: 90000.0
+settling_time_s: 2.0
+num_averages: 1

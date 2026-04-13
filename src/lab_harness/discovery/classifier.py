@@ -133,6 +133,14 @@ MEASUREMENT_ROLES: dict[str, list[str]] = {
     "MAGNETOSTRICTION": ["magnet", "strain_gauge", "gaussmeter"],
     "NERNST": ["magnet", "nanovoltmeter", "temperature_controller"],
     "TUNNELING": ["source_meter", "lock_in"],
+    # Quantum Design PPMS
+    "PPMS_RT": ["ppms"],
+    "PPMS_MR": ["ppms"],
+    "PPMS_HALL": ["ppms"],
+    "PPMS_HC": ["ppms"],
+    # Quantum Design MPMS
+    "MPMS_MH": ["mpms"],
+    "MPMS_MT": ["mpms"],
     # General purpose
     "CUSTOM_SWEEP": ["source_meter", "dmm"],
 }

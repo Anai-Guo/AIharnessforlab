@@ -1,0 +1,21 @@
+# MPMS Magnetization vs Temperature (M-T, ZFC/FC)
+name: "MPMS M-T (ZFC/FC)"
+description: "Zero-field-cooled and field-cooled magnetization vs temperature using MPMS"
+
+x_axis:
+  label: "Temperature"
+  unit: "K"
+  start: 2.0
+  stop: 400.0
+  step: 2.0
+  role: "mpms"
+
+y_channels:
+  - label: "DC Magnetization"
+    unit: "emu"
+    role: "mpms"
+
+max_field_oe: 70000.0
+max_temperature_k: 400.0
+settling_time_s: 3.0
+num_averages: 1
