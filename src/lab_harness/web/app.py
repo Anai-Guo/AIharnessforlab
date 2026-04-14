@@ -58,9 +58,87 @@ async def monitor_page():
     return _load_html("monitor.html")
 
 
+@app.get("/experiment", response_class=HTMLResponse)
+async def experiment_page():
+    """Serve the guided experiment page."""
+    return _load_html("experiment.html")
+
+
 # ---------------------------------------------------------------------------
 # API endpoints
 # ---------------------------------------------------------------------------
+
+
+@app.post("/api/experiment/start")
+async def start_experiment(direction: str, material: str):
+    """Start a guided experiment flow asynchronously."""
+    from pathlib import Path
+
+    from lab_harness.config import Settings
+    from lab_harness.orchestrator.flow import ExperimentFlow
+
+    settings = Settings.load()
+    flow = ExperimentFlow(settings, data_root=Path("./data"))
+
+    # Run steps up to measurement prep (no interactive prompts)
+    flow.session.direction = direction
+    flow.session.material = material
+
+    # Parallel: literature + instruments
+    import asyncio
+
+    literature, instruments = await asyncio.gather(
+        flow._search_literature(),
+        flow._scan_instruments(),
+        return_exceptions=True,
+    )
+    if isinstance(literature, Exception):
+        literature = {}
+    if isinstance(instruments, Exception):
+        instruments = []
+    flow.session.literature = literature if isinstance(literature, dict) else {}
+    flow.session.instruments = instruments if isinstance(instruments, list) else []
+
+    # Decide measurement type
+    from lab_harness.orchestrator.decider import decide_measurement
+
+    decision = decide_measurement(direction, material, flow.session.instruments, flow.session.literature)
+    flow.session.measurement_type = decision.get("measurement_type", "IV")
+    flow.session.measurement_reason = decision.get("reasoning", "")
+
+    # Build plan
+    from lab_harness.planning.boundary_checker import check_boundaries
+    from lab_harness.planning.plan_builder import build_plan_from_template
+
+    try:
+        plan = build_plan_from_template(flow.session.measurement_type, sample_description=material)
+    except FileNotFoundError:
+        flow.session.measurement_type = "IV"
+        plan = build_plan_from_template("IV", sample_description=material)
+    validation = check_boundaries(plan)
+    flow.session.plan = plan.model_dump()
+    flow.session.validation = validation.model_dump()
+
+    return {
+        "session_id": flow.session.session_id,
+        "measurement_type": flow.session.measurement_type,
+        "reasoning": flow.session.measurement_reason,
+        "instruments": flow.session.instruments,
+        "plan": flow.session.plan,
+        "validation": flow.session.validation,
+        "folder_name": flow.session.folder_name,
+    }
+
+
+@app.post("/api/experiment/open-folder")
+async def api_open_folder(folder_path: str):
+    """Open a data folder in the OS file explorer."""
+    from pathlib import Path
+
+    from lab_harness.orchestrator.folder import open_folder
+
+    ok = open_folder(Path(folder_path))
+    return {"opened": ok, "path": folder_path}
 
 
 @app.get("/api/templates")
@@ -228,6 +306,7 @@ def run_web(host: str = "127.0.0.1", port: int = 8080):
     import uvicorn
 
     print(f"Starting LabAgent at http://{host}:{port}")
-    print(f"  Dashboard: http://{host}:{port}/")
-    print(f"  Monitor:   http://{host}:{port}/monitor")
+    print(f"  Dashboard:  http://{host}:{port}/")
+    print(f"  Monitor:    http://{host}:{port}/monitor")
+    print(f"  Experiment: http://{host}:{port}/experiment")
     uvicorn.run(app, host=host, port=port)

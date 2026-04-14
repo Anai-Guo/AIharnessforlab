@@ -356,6 +356,21 @@ def cmd_serve(args: argparse.Namespace, settings: Settings) -> None:
     run_server()
 
 
+def cmd_start(args: argparse.Namespace, settings: Settings) -> None:
+    """Guided end-to-end experiment flow."""
+    import asyncio
+    from pathlib import Path
+
+    from lab_harness.orchestrator.flow import ExperimentFlow
+
+    data_root = Path(args.data_root) if args.data_root else Path("./data")
+    flow = ExperimentFlow(settings, data_root=data_root)
+    try:
+        asyncio.run(flow.run(direction=args.direction or "", material=args.material or ""))
+    except KeyboardInterrupt:
+        print("\n\nCancelled.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="labharness",
@@ -452,6 +467,12 @@ def main() -> None:
     # serve
     sub.add_parser("serve", help="Start MCP server")
 
+    # start
+    p_start = sub.add_parser("start", help="Guided end-to-end experiment (recommended first command)")
+    p_start.add_argument("--direction", help="Research direction (skip prompt)")
+    p_start.add_argument("--material", help="Sample material (skip prompt)")
+    p_start.add_argument("--data-root", help="Root directory for data folders")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -473,6 +494,7 @@ def main() -> None:
         "web": cmd_web,
         "setup": cmd_setup,
         "serve": cmd_serve,
+        "start": cmd_start,
     }
     cmd_map[args.command](args, settings)
 

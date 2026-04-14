@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LabAgent — Guided Experiment</title>
+<style>
+:root {
+  --bg-primary: #0f0f1e;
+  --bg-card: #151530;
+  --border-gold: #c8a96e;
+  --gold: #c8a96e;
+  --gold-bright: #e8d5a0;
+  --text-primary: #ece5d8;
+  --text-secondary: #a09a8d;
+  --electro: #c882ff;
+  --pyro: #ff6b4a;
+  --cryo: #9cf0ff;
+  --dendro: #7bc639;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Cinzel', 'Georgia', serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 2rem;
+}
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  background: var(--bg-card);
+}
+.header h1 { color: var(--gold); font-size: 2rem; }
+.header p { color: var(--text-secondary); margin-top: 0.5rem; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.card h3 { color: var(--gold-bright); margin-bottom: 1rem; }
+
+input, button, select {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-gold);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+input:focus { outline: none; border-color: var(--gold-bright); }
+
+.btn {
+  background: linear-gradient(135deg, var(--border-gold), var(--gold-bright));
+  color: var(--bg-primary);
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  transition: transform 0.1s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; color: var(--text-secondary); margin-bottom: 0.5rem; }
+.form-group input { width: 100%; }
+
+#loader { text-align: center; padding: 2rem; color: var(--gold); display: none; }
+#loader .dot { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+.instrument-item {
+  padding: 0.5rem;
+  border-left: 3px solid var(--cryo);
+  margin-bottom: 0.5rem;
+  background: rgba(156, 240, 255, 0.05);
+}
+.reasoning {
+  background: rgba(200, 130, 255, 0.1);
+  border-left: 3px solid var(--electro);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.folder-path {
+  font-family: monospace;
+  background: var(--bg-primary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  color: var(--dendro);
+  word-break: break-all;
+}
+
+.hidden { display: none; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>⚗ LabAgent Guided Experiment</h1>
+    <p>Tell me what you want to study — I'll handle the rest</p>
+  </div>
+
+  <div id="step1" class="card">
+    <h3>1. What are you studying?</h3>
+    <div class="form-group">
+      <label>Research Direction</label>
+      <input type="text" id="direction" placeholder="e.g. transport, photovoltaics, magnetism">
+    </div>
+    <div class="form-group">
+      <label>Sample Material</label>
+      <input type="text" id="material" placeholder="e.g. Si wafer, Fe/MgO bilayer, GaAs">
+    </div>
+    <button class="btn" onclick="startExperiment()">🚀 Start Experiment</button>
+  </div>
+
+  <div id="loader">
+    <p><span class="dot">●</span> Searching literature and scanning instruments...</p>
+  </div>
+
+  <div id="results" class="hidden">
+    <div class="card">
+      <h3>2. AI Decision</h3>
+      <p>Recommended measurement: <strong id="resultType" style="color: var(--gold)"></strong></p>
+      <div class="reasoning" id="resultReasoning"></div>
+    </div>
+
+    <div class="card">
+      <h3>3. Detected Instruments</h3>
+      <div id="instrumentList"></div>
+    </div>
+
+    <div class="card">
+      <h3>4. Measurement Plan</h3>
+      <div id="planSummary"></div>
+      <div style="margin-top: 1rem;">
+        <strong>Data will be saved to:</strong>
+        <div class="folder-path" id="folderPath"></div>
+      </div>
+    </div>
+
+    <div class="card" style="text-align: center;">
+      <p style="margin-bottom: 1rem; color: var(--text-secondary);">Connect your instruments as listed above, then:</p>
+      <button class="btn" onclick="runMeasurement()">▶ Start Measurement</button>
+    </div>
+  </div>
+
+  <div id="complete" class="hidden">
+    <div class="card" style="text-align: center; border-color: var(--dendro);">
+      <h3 style="color: var(--dendro);">✓ Experiment Complete</h3>
+      <p id="completeMessage"></p>
+      <div style="margin-top: 1rem;">
+        <button class="btn" onclick="openFolder()">📁 Open Data Folder</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+let currentSession = null;
+
+async function startExperiment() {
+  const direction = document.getElementById('direction').value.trim();
+  const material = document.getElementById('material').value.trim();
+
+  if (!direction || !material) {
+    alert('Please fill in both fields');
+    return;
+  }
+
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('loader').style.display = 'block';
+
+  try {
+    const resp = await fetch('/api/experiment/start?direction=' + encodeURIComponent(direction) + '&material=' + encodeURIComponent(material), {
+      method: 'POST'
+    });
+    const data = await resp.json();
+    currentSession = data;
+    renderResults(data);
+  } catch (e) {
+    alert('Error: ' + e.message);
+    document.getElementById('step1').style.display = 'block';
+  } finally {
+    document.getElementById('loader').style.display = 'none';
+  }
+}
+
+function renderResults(data) {
+  document.getElementById('resultType').textContent = data.measurement_type;
+  document.getElementById('resultReasoning').textContent = data.reasoning || '(no reasoning given)';
+
+  const instList = document.getElementById('instrumentList');
+  if (data.instruments && data.instruments.length > 0) {
+    instList.innerHTML = data.instruments.map(i =>
+      `<div class="instrument-item"><strong>${i.vendor || '?'} ${i.model || '?'}</strong> <span style="color: var(--text-secondary);">at ${i.resource || '?'}</span></div>`
+    ).join('');
+  } else {
+    instList.innerHTML = '<p style="color: var(--text-secondary);">No instruments detected. Running in simulation mode.</p>';
+  }
+
+  const plan = data.plan || {};
+  const xAxis = plan.x_axis || {};
+  document.getElementById('planSummary').innerHTML =
+    `<p><strong>Type:</strong> ${plan.name || data.measurement_type}</p>` +
+    `<p><strong>Sweep:</strong> ${xAxis.label || '?'} from ${xAxis.start} to ${xAxis.stop} ${xAxis.unit || ''}</p>` +
+    `<p><strong>Points:</strong> ${Math.abs((xAxis.stop - xAxis.start) / xAxis.step) + 1}</p>`;
+
+  document.getElementById('folderPath').textContent = './data/' + data.folder_name;
+  document.getElementById('results').classList.remove('hidden');
+}
+
+async function runMeasurement() {
+  // Simulated: just show complete
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('complete').classList.remove('hidden');
+  document.getElementById('completeMessage').textContent =
+    `Your ${currentSession.measurement_type} measurement on ${document.getElementById('material').value} is complete. Check the data folder for results.`;
+}
+
+async function openFolder() {
+  if (!currentSession) return;
+  const folderPath = './data/' + currentSession.folder_name;
+  const resp = await fetch('/api/experiment/open-folder?folder_path=' + encodeURIComponent(folderPath), {
+    method: 'POST'
+  });
+  const result = await resp.json();
+  if (!result.opened) {
+    alert('Could not open folder. Path: ' + folderPath);
+  }
+}
+</script>
+</body>
+</html>
+</content>
+</invoke>
