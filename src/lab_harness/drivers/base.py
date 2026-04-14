@@ -99,7 +99,10 @@ class VisaDriver(InstrumentDriver):
     """Base driver for VISA-compatible instruments (GPIB, USB, serial).
 
     Provides connect/disconnect/query/write with automatic retry.
+    Supports auto-reconnect on communication failure.
     """
+
+    auto_reconnect: bool = True
 
     def connect(self) -> None:
         import pyvisa
@@ -126,14 +129,57 @@ class VisaDriver(InstrumentDriver):
         self.write("*RST")
 
     @retry(max_attempts=3, delay=0.5)
-    def query(self, command: str) -> str:
-        """Send a query and return the response. Auto-retries on failure."""
+    def _query_inner(self, command: str) -> str:
+        """Inner query with retry. Called by query()."""
         return self._instrument.query(command).strip()
 
+    def query(self, command: str) -> str:
+        """Send a query and return the response.
+
+        Auto-retries on failure. If retries are exhausted and
+        auto_reconnect is enabled, attempts to reconnect and retry once.
+        """
+        try:
+            return self._query_inner(command)
+        except Exception:
+            if not self.auto_reconnect:
+                raise
+            logger.info("Retries exhausted for query, attempting reconnect to %s", self.resource)
+            self.disconnect()
+            self.connect()
+            return self._instrument.query(command).strip()
+
     @retry(max_attempts=3, delay=0.5)
-    def write(self, command: str) -> None:
-        """Send a command. Auto-retries on failure."""
+    def _write_inner(self, command: str) -> None:
+        """Inner write with retry. Called by write()."""
         self._instrument.write(command)
+
+    def write(self, command: str) -> None:
+        """Send a command.
+
+        Auto-retries on failure. If retries are exhausted and
+        auto_reconnect is enabled, attempts to reconnect and retry once.
+        """
+        try:
+            self._write_inner(command)
+        except Exception:
+            if not self.auto_reconnect:
+                raise
+            logger.info("Retries exhausted for write, attempting reconnect to %s", self.resource)
+            self.disconnect()
+            self.connect()
+            self._instrument.write(command)
+
+    def is_connected(self) -> bool:
+        """Test if instrument is still responding."""
+        if not self._connected or not self._instrument:
+            return False
+        try:
+            self._instrument.query("*IDN?")
+            return True
+        except Exception:
+            self._connected = False
+            return False
 
     def read_float(self, command: str) -> float:
         """Query and parse as float."""
