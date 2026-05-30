@@ -79,12 +79,18 @@ class SessionRegistry:
             live.completed_at = time.time()
 
     def cleanup(self) -> int:
-        """Remove sessions that completed > TTL ago. Returns count removed."""
+        """Remove sessions whose age since completion has reached the TTL. Returns count removed.
+
+        Uses ``>=`` so that a ``done_ttl_seconds`` of 0 expires sessions
+        immediately, even when the elapsed time is below the system clock's
+        resolution (a strict ``>`` left such sessions stuck forever on coarse
+        clocks).
+        """
         now = time.time()
         to_remove = [
             sid
             for sid, live in self._sessions.items()
-            if live.done and live.completed_at and (now - live.completed_at) > self._done_ttl
+            if live.done and live.completed_at and (now - live.completed_at) >= self._done_ttl
         ]
         for sid in to_remove:
             del self._sessions[sid]
