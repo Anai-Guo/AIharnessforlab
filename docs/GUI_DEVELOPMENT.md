@@ -4,20 +4,21 @@
 
 ## Architecture Overview
 
-The Web GUI is a **single-file embedded HTML application** inside
-`src/lab_harness/web/app.py`. There are NO external HTML/CSS/JS files —
-everything is returned as a Python string from two functions:
+The Web GUI is a FastAPI app in `src/lab_harness/web/app.py` that serves three
+self-contained HTML pages from `src/lab_harness/web/templates/`. Each page has
+its CSS and JavaScript inline; `_load_html()` reads the file and returns it:
 
 ```
-_embedded_dashboard()  → GET /       (measurement template configurator)
-_embedded_monitor()    → GET /monitor (real-time data monitoring)
+dashboard.html   → GET /           (measurement template configurator)
+monitor.html     → GET /monitor    (real-time data monitoring)
+experiment.html  → GET /experiment (guided experiment page)
 ```
 
-### Why Single-File?
+### Why Single-File Pages?
 
-- Zero static file dependencies — works anywhere Python runs
+- No static asset pipeline — each page is one HTML file
 - No build step (no webpack, no npm)
-- Easy to modify — just edit the Python string
+- Easy to modify — just edit the HTML file
 - Keeps deployment simple — `pip install` and done
 
 ### Technology Stack
@@ -35,26 +36,23 @@ _embedded_monitor()    → GET /monitor (real-time data monitoring)
 ```
 src/lab_harness/web/
   __init__.py
-  app.py          ← Everything is here
-    ├── API endpoints (lines ~27-120)
-    │   GET /api/templates
-    │   GET /api/templates/{type}
-    │   GET /api/instruments
-    │   POST /api/plan
-    │   GET /api/health
-    │
-    ├── _embedded_dashboard() (lines ~130-360)
-    │   Template configurator page
-    │
-    └── _embedded_monitor() (lines ~365-end)
-        Real-time monitoring page
+  app.py          ← FastAPI app: page routes + API endpoints
+    ├── GET /, /monitor, /experiment    (serve the HTML files below)
+    ├── GET /api/templates, /api/templates/{type}, /api/instruments, /api/health
+    ├── POST /api/plan, /api/configure
+    ├── /api/experiment/...             (guided-experiment session API, SSE events)
+    └── WS /ws/stream                   (real-time data streaming)
+  templates/
+    dashboard.html    ← Template configurator page
+    monitor.html      ← Real-time monitoring page
+    experiment.html   ← Guided experiment page
 ```
 
 ## How to Modify the Monitor Page
 
 ### Adding a New Data Channel
 
-1. Find the `CHANNELS` array in the JavaScript section of `_embedded_monitor()`:
+1. Find the `CHANNELS` array in the JavaScript section of `templates/monitor.html`:
 ```javascript
 const CHANNELS = [
   {id:"time", label:"Time", unit:"s", element:"geo"},
@@ -215,14 +213,14 @@ Add new `<div class="sidebar-section">` blocks for new groups.
 
 ### "I want to add a control panel (not just monitoring)"
 
-Add a new route and function:
+Add a new route that serves a new HTML file:
 ```python
 @app.get("/control", response_class=HTMLResponse)
 async def control_page():
-    return _embedded_control_panel()
+    return _load_html("control.html")
 ```
 
-Then create `_embedded_control_panel()` with forms for instrument
+Then create `templates/control.html` with forms for instrument
 control (set current, set temperature, etc.).
 
 ## Testing the GUI
@@ -235,8 +233,9 @@ pip install -e ".[web]"
 labharness web --port 8080
 
 # Open in browser
-# Dashboard: http://localhost:8080/
-# Monitor:   http://localhost:8080/monitor
+# Dashboard:  http://localhost:8080/
+# Monitor:    http://localhost:8080/monitor
+# Experiment: http://localhost:8080/experiment
 ```
 
 No automated GUI tests — verify visually in browser.

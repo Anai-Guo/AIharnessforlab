@@ -17,9 +17,11 @@ Classification → Measurement Planning → Safety Validation →
 Data Analysis → AI Interpretation
 ```
 
-The system has **46 measurement templates** across 9 disciplines (physics, chemistry,
-biology, materials science, semiconductor, thermoelectric, superconductivity,
-dielectric, environmental/sensors) and supports **any GPIB/USB/serial instrument**.
+The system has **46 measurement templates** across 9 disciplines (electrical
+characterization, electrochemistry, semiconductor & optoelectronics,
+sensors/materials/environmental, dielectric & ferroelectric, thermoelectric,
+superconductivity, magnetic/condensed-matter, Quantum Design PPMS/MPMS — plus one
+general-purpose custom sweep) and supports **any GPIB/USB/serial instrument**.
 
 ---
 
@@ -174,6 +176,7 @@ the top when the user's discipline is ambiguous.
 | "pH calibration" | `ph_calibration` |
 | "humidity sensor" | `humidity_response` |
 | "biosensor impedance" | `impedance_biosensor` |
+| "cell counting", "Coulter counter" | `cell_counting` |
 | "strain gauge" | `strain_gauge` |
 | "fatigue test" | `fatigue` |
 | "custom measurement" | `custom_sweep` |
@@ -227,7 +230,7 @@ export LABHARNESS_MODEL=claude-sonnet-4-20250514
 export LABHARNESS_API_KEY=sk-...
 ```
 
-Supported providers: `anthropic`, `openai`, `ollama`, `gemini`, `deepseek`
+Supported providers: `anthropic`, `openai`, `ollama`, `deepseek` (vLLM or any OpenAI-compatible server: `openai` plus `LABHARNESS_BASE_URL`)
 
 For local/private models:
 ```bash
@@ -267,6 +270,7 @@ Available MCP tools:
 - `search_literature(measurement_type, sample_description?)` → find protocols
 - `analyze_data(data_path, measurement_type, use_ai?, interpret?)` → analyze
 - `generate_skill(measurement_type, sample_description?)` → create protocol
+- `manual_lookup(make, model, interface_or_topic?, search_web?)` → fetch manufacturer programming manual + known Python drivers
 - `healthcheck()` → system status
 
 ---
@@ -279,7 +283,7 @@ labharness web
 ```
 
 Opens at `http://localhost:8080`. The GUI dynamically generates measurement
-forms from YAML templates — one adaptive interface for all 46+ measurement types.
+forms from YAML templates — one adaptive interface for all 46 measurement types.
 
 ---
 
@@ -327,9 +331,9 @@ forms from YAML templates — one adaptive interface for all 46+ measurement typ
 ### Modifying the Web GUI
 See `docs/GUI_DEVELOPMENT.md` for the complete GUI modification guide.
 Key points:
-- GUI is a single embedded HTML in `src/lab_harness/web/app.py`
-- Two pages: `_embedded_dashboard()` (template config) and `_embedded_monitor()` (real-time charts)
-- Adding a channel: add to `CHANNELS` array in JavaScript
+- HTML pages live in `src/lab_harness/web/templates/` and are served by `src/lab_harness/web/app.py`
+- Three pages: `/` (`dashboard.html`, template config), `/monitor` (`monitor.html`, real-time charts), `/experiment` (`experiment.html`, guided experiment)
+- Adding a channel: add to the `CHANNELS` array in `monitor.html`
 - Template-driven: metric cards auto-configure from YAML templates
 - Presets: saved to localStorage, restored on next session
 - Charts: all use Chart.js, all have selectable X/Y axes

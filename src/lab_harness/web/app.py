@@ -1,12 +1,13 @@
 """Web GUI for LabAgent.
 
 Adaptive interface that dynamically generates measurement forms
-from YAML templates — supports 46+ measurement types without
+from YAML templates — supports 46 measurement types without
 hardcoded pages.
 
 HTML templates are in web/templates/:
-  dashboard.html — measurement template configurator
-  monitor.html   — real-time multi-panel data monitor
+  dashboard.html  — measurement template configurator
+  monitor.html    — real-time multi-panel data monitor
+  experiment.html — guided experiment page
 """
 
 from __future__ import annotations

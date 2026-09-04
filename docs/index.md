@@ -17,7 +17,7 @@ pip install git+https://github.com/Anai-Guo/LabAgent.git
 - **46 measurement templates** across 9 disciplines
 - **AI at every step** — classification, planning, analysis, interpretation
 - **3-tier safety system** — block / confirm / allow
-- **6 AI model providers** — Claude, GPT, Gemini, Ollama, vLLM, DeepSeek
+- **4 AI model providers** — Claude, GPT, Ollama, DeepSeek via litellm (vLLM or any OpenAI-compatible server through the `openai` provider)
 - **Adaptive Web GUI** with real-time monitoring
 - **Terminal panel** (Claude Code-style)
 - **MCP server** for AI IDE integration

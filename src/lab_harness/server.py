@@ -24,7 +24,7 @@ mcp = FastMCP(
         "AI-guided laboratory automation for physics, chemistry, biology, "
         "materials science, environmental, and engineering labs. Covers "
         "electrical transport, electrochemistry, spectroscopy, thermal, optics, "
-        "and sensor measurements across ~30 instruments from 15+ manufacturers."
+        "and sensor measurements across 68 instruments from 26 manufacturers."
     ),
 )
 

@@ -1,7 +1,7 @@
 """Unified LLM router using litellm.
 
-Supports cloud models (Claude, GPT, Gemini) and local models (Ollama, vLLM)
-through a single interface.
+Supports cloud models (Claude, GPT, DeepSeek) and local models (Ollama; vLLM or
+any OpenAI-compatible server via ``base_url``) through a single interface.
 """
 
 from __future__ import annotations

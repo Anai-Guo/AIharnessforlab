@@ -79,6 +79,7 @@ The WebSocket connection handles disconnects gracefully -- the monitor automatic
 |--------|----------|-------------|
 | GET | `/` | Dashboard HTML page |
 | GET | `/monitor` | Monitor HTML page |
+| GET | `/experiment` | Guided experiment HTML page |
 | GET | `/api/templates` | List all templates with metadata |
 | GET | `/api/templates/{type}` | Get full template configuration |
 | GET | `/api/instruments` | Scan connected instruments |

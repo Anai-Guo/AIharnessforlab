@@ -1,15 +1,18 @@
 """Real-instrument execution backend.
 
-Runs a :class:`MeasurementPlan` against live hardware through either our
-in-tree ``VisaDriver`` subclasses or the pymeasure adapter. When hardware
+Runs a :class:`MeasurementPlan` against live hardware through the drivers in a
+:class:`DriverRegistry` (in-tree ``VisaDriver`` subclasses, the pymeasure
+adapter, or the Zurich Instruments / BioLogic adapters). When hardware
 isn't reachable or no driver covers the measurement type, callers should
 fall back to ``orchestrator.simulators.simulate``.
 
-This module is intentionally small: we only implement the two measurement
-types where the role → command mapping is unambiguous (IV, RT). Everything
-else raises :class:`UnsupportedMeasurementError` and the flow layer falls
-back to the simulator. Adding a new type means writing a ``_execute_<type>``
-function here and listing it in ``EXECUTORS``.
+Only measurement types with an unambiguous role → command mapping are
+implemented here — currently the 16 listed in ``EXECUTORS`` (IV, RT, DELTA,
+HIGH_R, BREAKDOWN, SEEBECK, TUNNELING, PHOTO_IV, CV, TRANSFER, OUTPUT,
+CYCLIC_VOLTAMMETRY, EIS, CHRONOAMPEROMETRY, PHOTORESPONSE, POTENTIOMETRY).
+Everything else raises :class:`UnsupportedMeasurementError` and the flow
+layer falls back to the simulator. Adding a new type means writing a
+``_execute_<type>`` function here and listing it in ``EXECUTORS``.
 
 Safety invariants
 -----------------

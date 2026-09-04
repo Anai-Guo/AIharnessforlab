@@ -11,7 +11,7 @@ An open-source Python framework for AI-guided lab-instrument automation:
 literature-informed measurement planning, instrument discovery and
 classification, safety-boundary validation, template-based data analysis,
 and an experiment-memory store. 46 measurement templates across 9 scientific
-disciplines. ~68 instrument models from 26 vendors documented in the
+disciplines. 68 instrument models from 26 vendors documented in the
 classifier registry.
 
 **Current development status (honest):**
@@ -26,14 +26,14 @@ classifier registry.
   (time-resolved photocurrent), and `POTENTIOMETRY` (OCP). Backed by
   four driver backends (pymeasure, Zurich Instruments, BioLogic, in-tree
   VisaDriver). When real hardware isn't reachable or the measurement
-  type has no real executor (HALL, MR, AHE, FMR, UV_VIS, etc.), the
+  type has no real executor (HALL, MR, AHE, FMR, PHOTOCURRENT, etc.), the
   flow falls back to a physics simulator. CSV/PNG output clearly indicates which backend
   produced it — real runs say "real instrument measurement data" with
   the driver coverage map, simulated runs say "PHYSICS SIMULATION".
 - **Four driver backends:**
   1. **In-tree VisaDriver subclasses** (3): Keithley 2400, Keithley 6221,
      Lakeshore 335 — custom SCPI, auto-retry.
-  2. **pymeasure adapter** (~15 models): Keithley 2000/2182/2450/6517,
+  2. **pymeasure adapter** (16 models): Keithley 2000/2182/2450/6517,
      Agilent 34410/33500/E4980, SRS SR830/SR860, Lake Shore families, etc.
      Extending `PYMEASURE_MODEL_MAP` in `drivers/pymeasure_adapter.py`
      adds more.
@@ -41,8 +41,8 @@ classifier registry.
      `zhinst-toolkit`. Lock-in operations (frequency, time constant,
      X/Y readout).
   4. **BioLogic adapter** (4 models): SP-200, SP-300, VSP, VMP3 via
-     `easy-biologic`. Cyclic voltammetry wired; EIS and chronoamperometry
-     are the next extension.
+     `easy-biologic`. CV, EIS, chronoamperometry, and OCP (potentiometry)
+     are wired.
 - **`execution_mode`** on the session controls this: `"auto"` (default,
   try real → simulator on failure), `"real"` (fail loudly if no driver),
   or `"simulated"` (never touch hardware).
@@ -98,7 +98,8 @@ MCP tools:         9 (scan, classify, propose, validate, literature,
 CLI subcommands:   15 (scan, classify, propose, literature, generate-skill,
                    analyze, procedures, chat, web, panel, export, campaign,
                    setup, serve, start)
-AI providers:      6 (Claude, GPT-4o, Gemini, Ollama, vLLM, DeepSeek) via litellm
+AI providers:      4 (Claude, GPT-4o, Ollama, DeepSeek) via litellm; vLLM or any
+                   OpenAI-compatible server via provider "openai" + base_url
 Tests:             276 passing
 License:           MIT
 ```
@@ -147,7 +148,7 @@ beamline orchestration, recommend Bluesky.
 
 ```
 User input (natural language)
-  → litellm router (Claude / GPT / Gemini / Ollama / vLLM / DeepSeek)
+  → litellm router (Claude / GPT / Ollama / DeepSeek; OpenAI-compatible endpoints via base_url)
     → Literature search (paper-pilot MCP client)
     → Instrument discovery (PyVISA + pyserial scan)
     → Classification (68-model dict lookup → LLM fallback for unknowns)
@@ -197,7 +198,8 @@ one style per document and stay consistent.
 1. More measurement templates — 46 today, plenty of room
 2. More concrete hardware drivers — 3 today, each one makes the execution
    layer more real
-3. Real PyMeasure-backed execution (the biggest open milestone)
+3. Real execution for the remaining 30 measurement types (HALL, MR, AHE,
+   FMR, PHOTOCURRENT, …) — 16 of 46 run on hardware today
 4. PyPI publication
 
 See `CATALOG.md` for how to contribute.

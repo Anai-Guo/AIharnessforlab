@@ -19,7 +19,7 @@ I got tired of watching researchers in every discipline write one-off measuremen
 - Generates a measurement plan with safety boundaries (so you don't fry your samples)
 - Analyzes your data and explains what the results mean
 
-**Coverage (~50 models across 15+ vendors):**
+**Coverage (68 models across 26 vendors):**
 - Electrical/transport: Keithley 2400/6221/2182A/6517, NI DAQ, Lakeshore cryogenics
 - Signals & RF: Tektronix / Keysight / Rigol scopes + AWGs, SRS & Zurich lock-ins, R&S and Keysight spectrum/VNAs
 - Optics/photonics: Thorlabs PM100D / LDC205C / MDT693B, Newport 1830-C, Ocean Insight spectrometers
@@ -29,8 +29,8 @@ I got tired of watching researchers in every discipline write one-off measuremen
 - Condensed-matter specialty: Quantum Design PPMS/MPMS
 
 **Key features:**
-- 46 measurement templates: IV, R-T, CV, EIS, chronoamperometry, UV-Vis absorbance, gas sensor response, photocurrent, Hall effect, and many more
-- Works with 6 AI providers (Claude, GPT, Gemini, Ollama for local/private, vLLM, DeepSeek)
+- 46 measurement templates: IV, R-T, CV, EIS, chronoamperometry, impedance biosensor, gas sensor response, photocurrent, Hall effect, and many more
+- Works with 4 AI providers (Claude, GPT, Ollama for local/private, DeepSeek) — vLLM or any OpenAI-compatible server plugs in through the OpenAI provider
 - Mandatory "look up the manual online" rule — the AI fetches the manufacturer's programming guide instead of guessing SCPI commands
 - Web GUI with real-time monitoring panels
 - Terminal panel (like Claude Code but for lab instruments)

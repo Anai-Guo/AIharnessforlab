@@ -3,80 +3,95 @@
 ## Measurement Templates
 
 Templates define what to measure. Located in `src/lab_harness/planning/templates/`.
+46 templates: 45 across the 9 disciplines below plus one general-purpose custom sweep.
+The Instruments column lists the instrument roles referenced by each template's
+sweep axis and data channels.
 
-### Electrical Characterization
+### Electrical Characterization (7)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `iv.yaml` | Current-Voltage curve | Source meter |
-| `rt.yaml` | Resistance vs Temperature | Source meter + temp controller |
-| `delta.yaml` | Ultra-low resistance (delta mode) | K6221 + K2182A |
-| `high_r.yaml` | High resistance (>1 GΩ) | Electrometer |
-| `transfer.yaml` | FET transfer curve | Source meter (2 channels) |
-| `output.yaml` | FET output curve | Source meter (2 channels) |
-| `breakdown.yaml` | Dielectric breakdown | Source meter |
+| `iv.yaml` | Sweep source current and measure voltage | Source meter |
+| `rt.yaml` | Measure resistance as a function of temperature | Temp controller + DMM |
+| `delta.yaml` | Sweep DC current and measure nanovoltage for ultra-low resistance samples | AC/pulse current source + Nanovoltmeter |
+| `high_r.yaml` | Sweep voltage and measure picoamp current for high-resistance samples | Electrometer |
+| `transfer.yaml` | Sweep gate voltage and measure drain current for transistor characterization | Source meter (gate) + Source meter (drain) |
+| `output.yaml` | Sweep drain voltage at fixed gate voltage for transistor output characterization | Source meter (drain) + Source meter (gate) |
+| `breakdown.yaml` | Ramp voltage until dielectric breakdown, monitoring leakage current | Electrometer |
 
-### Magnetic Measurements
+### Magnetic Measurements (condensed-matter) (8)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `ahe.yaml` | Anomalous Hall Effect | Source meter + DMM + gaussmeter |
-| `mr.yaml` | Magnetoresistance | Source meter + DMM + gaussmeter |
-| `sot.yaml` | Spin-Orbit Torque loop shift | + pulse source |
-| `hall.yaml` | Standard Hall effect | Source meter + DMM + gaussmeter |
-| `fmr.yaml` | Ferromagnetic resonance | Lock-in + gaussmeter |
-| `hysteresis.yaml` | Magnetic hysteresis (VSM/SQUID) | Magnetometer + gaussmeter |
+| `hall.yaml` | Sweep magnetic field and measure Hall voltage for carrier density and mobility | Magnet + DMM + DMM (secondary) |
+| `mr.yaml` | Sweep magnetic field and measure longitudinal resistance | Magnet + DMM |
+| `ahe.yaml` | Sweep magnetic field and measure transverse Hall resistance | Magnet + DMM + DMM (secondary) |
+| `sot.yaml` | Sweep field at each pulse current to measure current-induced switching | Magnet + DMM + AC/pulse current source |
+| `fmr.yaml` | Sweep magnetic field and measure microwave absorption for FMR spectroscopy | Magnet + Lock-in amplifier |
+| `hysteresis.yaml` | Sweep magnetic field and measure magnetization (M-H loop via VSM/SQUID) | Magnet + Magnetometer (VSM/SQUID) |
+| `magnetostriction.yaml` | Magnetic field sweep, measure strain or length change | Magnet + Strain gauge + Gaussmeter |
+| `nernst.yaml` | Magnetic field sweep, measure transverse thermoelectric voltage | Magnet + Nanovoltmeter + Temp controller |
 
-### Thermoelectric
+### Thermoelectric (2)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `seebeck.yaml` | Seebeck coefficient | DMM + temp controller |
-| `thermal_conductivity.yaml` | Thermal conductivity | Heater + temp controller |
+| `seebeck.yaml` | Sweep temperature gradient and measure Seebeck voltage | Temp controller + Nanovoltmeter + Temp controller (secondary) |
+| `thermal_conductivity.yaml` | Sweep heater power and measure temperature difference for thermal conductivity | Source meter + Temp controller + Temp controller (secondary) |
 
-### Superconductivity
+### Superconductivity (2)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `tc.yaml` | Superconducting Tc | Source meter + temp controller |
-| `jc.yaml` | Critical current density | Source meter + temp controller |
+| `tc.yaml` | Sweep temperature and measure resistance to find superconducting Tc | Temp controller + DMM + Nanovoltmeter |
+| `jc.yaml` | Sweep current at fixed temperature and field to determine critical current Ic | Source meter + Nanovoltmeter + Temp controller |
 
-### Electrochemistry
+### Electrochemistry (4)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `cyclic_voltammetry.yaml` | Cyclic voltammetry | Potentiostat |
-| `eis.yaml` | Electrochemical impedance | LCR meter |
-| `chronoamperometry.yaml` | Chronoamperometry | Potentiostat |
+| `cyclic_voltammetry.yaml` | Triangle wave voltage sweep, measure current for redox reaction analysis | Potentiostat |
+| `eis.yaml` | Frequency sweep at fixed DC bias, measure complex impedance (Z real/imaginary) | Impedance analyzer |
+| `chronoamperometry.yaml` | Step voltage and measure current vs time for diffusion studies | Potentiostat |
+| `potentiometry.yaml` | Measure open circuit potential vs time for corrosion or battery studies | Electrometer |
 
-### Dielectric & Ferroelectric
+### Dielectric & Ferroelectric (4)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `cv.yaml` | Capacitance-Voltage | LCR meter |
-| `pe_loop.yaml` | P-E hysteresis loop | HV source + charge amp |
-| `pyroelectric.yaml` | Pyroelectric current | Electrometer + temp controller |
+| `cv.yaml` | Capacitance-Voltage characterization at multiple frequencies | LCR meter |
+| `pe_loop.yaml` | Sweep electric field and measure polarization for ferroelectric P-E loop | HV amplifier + Ferroelectric tester |
+| `pyroelectric.yaml` | Ramp temperature and measure pyroelectric current for Curie temperature determination | Temp controller + Electrometer |
+| `capacitance_frequency.yaml` | Frequency sweep at fixed DC bias, measure capacitance for trap analysis | LCR meter |
 
-### Semiconductor
+### Semiconductor & Optoelectronics (5)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `photo_iv.yaml` | Solar cell IV | Source meter + lamp |
-| `dlts.yaml` | Deep Level Transient Spectroscopy | LCR + temp controller |
+| `photo_iv.yaml` | Solar cell IV curve under illumination, extract power characteristics | Source meter |
+| `dlts.yaml` | Temperature sweep, measure capacitance transients for deep trap characterization | Temp controller + LCR meter |
+| `photocurrent.yaml` | Sweep illumination wavelength and measure photocurrent for spectral response | Monochromator + Source meter |
+| `photoresponse.yaml` | Measure photocurrent vs time under pulsed illumination for response dynamics | Source meter |
+| `tunneling.yaml` | Voltage sweep, measure differential conductance dI/dV for tunnel junction analysis | Source meter + Lock-in amplifier |
 
-### Sensors
+### Sensors, Materials & Environmental (7)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `gas_sensor.yaml` | Gas sensor response | DMM + gas controller |
-| `humidity_response.yaml` | Humidity sensor | DMM + humidity chamber |
+| `gas_sensor.yaml` | Gas concentration sweep, measure resistance change for sensor characterization | Gas controller + DMM |
+| `humidity_response.yaml` | Humidity sweep, measure resistance or capacitance change of sensor | Humidity chamber + DMM + LCR meter |
+| `impedance_biosensor.yaml` | Impedance vs analyte concentration for biosensor calibration curves | Impedance analyzer |
+| `cell_counting.yaml` | Voltage pulse detection and event counting for particle/cell sizing | Source meter |
+| `ph_calibration.yaml` | pH buffer sweep, measure electrode voltage for calibration curve | pH meter + Electrometer |
+| `strain_gauge.yaml` | Strain sweep, measure resistance change for piezoresistive characterization | Strain controller + DMM |
+| `fatigue.yaml` | Cyclic stress loading, measure resistance degradation over cycles | Strain controller + DMM + Load cell |
 
-### Quantum Design PPMS/MPMS
+### Quantum Design PPMS/MPMS (6)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `ppms_rt.yaml` | PPMS R-T (four-probe) | PPMS (MultiPyVu) |
-| `ppms_mr.yaml` | PPMS Magnetoresistance | PPMS (MultiPyVu) |
-| `ppms_hall.yaml` | PPMS Hall Effect | PPMS (MultiPyVu) |
-| `ppms_hc.yaml` | PPMS Heat Capacity | PPMS (MultiPyVu) |
-| `mpms_mh.yaml` | MPMS M-H Loop (SQUID) | MPMS (MultiPyVu) |
-| `mpms_mt.yaml` | MPMS M-T ZFC/FC | MPMS (MultiPyVu) |
+| `ppms_rt.yaml` | Four-probe resistance measurement as a function of temperature using Quantum Design PPMS | PPMS (MultiPyVu) |
+| `ppms_mr.yaml` | Field-dependent resistance measurement at fixed temperature using Quantum Design PPMS | PPMS (MultiPyVu) |
+| `ppms_hall.yaml` | Hall resistance vs field for carrier density and mobility using PPMS | PPMS (MultiPyVu) |
+| `ppms_hc.yaml` | Specific heat measurement as a function of temperature using PPMS relaxation method | PPMS (MultiPyVu) |
+| `mpms_mh.yaml` | DC magnetization measurement as a function of applied field using Quantum Design MPMS/SQUID | MPMS (MultiPyVu) |
+| `mpms_mt.yaml` | Zero-field-cooled and field-cooled magnetization vs temperature using MPMS | MPMS (MultiPyVu) |
 
-### General Purpose
+### General Purpose (1)
 | Template | Description | Instruments |
 |----------|-------------|-------------|
-| `custom_sweep.yaml` | User-defined X-Y sweep | Any |
+| `custom_sweep.yaml` | Generic X-Y sweep measurement with user-defined axes and channels | Source meter + DMM (defaults, user-configurable) |
 
 ---
 

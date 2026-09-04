@@ -22,16 +22,16 @@ One nice detail: a `manual_lookup` tool that forces the AI to fetch the manufact
 
 Technical highlights:
 - Agent harness architecture (inspired by OpenHarness) with async query loop
-- 9 standardized tools with Pydantic input validation
-- litellm for model-agnostic routing (Claude, GPT, Gemini, Ollama, vLLM, DeepSeek)
+- 10 standardized tools with Pydantic input validation
+- litellm for model-agnostic routing (Claude, GPT, Ollama, DeepSeek; vLLM via its OpenAI-compatible endpoint)
 - FastAPI web GUI that dynamically generates forms from YAML templates
 - Textual-based terminal panel (think Claude Code for lab instruments)
 - SQLite + FTS5 experiment memory with frozen snapshots
 - MCP server compatible with Claude Code / Cursor
 
-Covered instruments span the usual electrical/transport lineup (Keithley, Lakeshore, NI DAQ) plus Tektronix/Keysight/Rigol scopes+AWGs+PSUs, SRS/Zurich lock-ins, R&S and Keysight spectrum/VNAs, Thorlabs/Newport optical power meters and laser drivers, Ocean Insight spectrometers, BioLogic/Gamry/CH Instruments/Autolab/Palmsens potentiostats, BMG/Molecular Devices plate readers, Mettler/Ohaus balances, Orion pH meters, Alicat/MKS flow and pressure controllers, Oxford cryogenics, Quantum Design PPMS/MPMS. ~50 models across 15+ vendors.
+Covered instruments span the usual electrical/transport lineup (Keithley, Lakeshore, NI DAQ) plus Tektronix/Keysight/Rigol scopes+AWGs+PSUs, SRS/Zurich lock-ins, R&S and Keysight spectrum/VNAs, Thorlabs/Newport optical power meters and laser drivers, Ocean Insight spectrometers, BioLogic/Gamry/CH Instruments/Autolab/Palmsens potentiostats, BMG/Molecular Devices plate readers, Mettler/Ohaus balances, Orion pH meters, Alicat/MKS flow and pressure controllers, Oxford cryogenics, Quantum Design PPMS/MPMS. 68 models across 26 vendors.
 
-46 measurement types across 9 disciplines — IV curves, R-T, cyclic voltammetry, EIS, UV-Vis absorbance, gas sensor response, Hall effect, PPMS magnetoresistance, and more.
+46 measurement types across 9 disciplines — IV curves, R-T, cyclic voltammetry, EIS, photocurrent spectroscopy, gas sensor response, Hall effect, PPMS magnetoresistance, and more.
 
 MIT licensed. Looking for contributors who want to add templates or drivers for their specific measurement types.
 

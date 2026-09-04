@@ -10,7 +10,7 @@ If you encounter a make/model you do not recognize with high confidence, call
 the `manual_lookup` tool FIRST to retrieve the manufacturer's programming
 manual — never guess a role from memory alone.
 
-Example role mappings (non-exhaustive; the registry contains ~50 models):
+Example role mappings (non-exhaustive; the registry contains 68 models):
 
 Electrical / transport
 - Keithley 2400/2410 -> source_meter (DC current/voltage source + measure)

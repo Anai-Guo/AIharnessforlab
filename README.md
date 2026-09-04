@@ -7,8 +7,8 @@
   <img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python">
   <img src="https://img.shields.io/badge/tests-276%20passed-brightgreen.svg" alt="Tests">
   <img src="https://img.shields.io/badge/templates-46-orange.svg" alt="Templates">
-  <img src="https://img.shields.io/badge/instruments-~50%20models-blue.svg" alt="Instruments">
-  <img src="https://img.shields.io/badge/AI%20models-6%20providers-purple.svg" alt="Models">
+  <img src="https://img.shields.io/badge/instruments-68%20models-blue.svg" alt="Instruments">
+  <img src="https://img.shields.io/badge/AI%20models-4%20providers-purple.svg" alt="Models">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
 </p>
 
@@ -44,7 +44,7 @@ labharness start    # same flow, CLI-guided
 
 Most research labs have powerful instruments and terrible automation software. Researchers burn weeks writing one-off LabVIEW scripts for every new measurement, without safety nets or institutional memory. When a student graduates, the code leaves with them.
 
-LabAgent replaces that with a shared, AI-guided framework. Add a new measurement type by writing a 10-line YAML template. Swap AI providers with one config line. Every experiment gets a timestamped folder with raw data, analysis figures, AI-cited interpretation, and next-step suggestions — organized the same way for everyone on the team.
+LabAgent replaces that with a shared, AI-guided framework. Add a new measurement type by writing a 20–30-line YAML template. Swap AI providers with one config line. Every experiment gets a timestamped folder with raw data, analysis figures, AI-cited interpretation, and next-step suggestions — organized the same way for everyone on the team.
 
 ## Features at a Glance
 
@@ -53,7 +53,7 @@ LabAgent replaces that with a shared, AI-guided framework. Add a new measurement
 | **46 Measurement Templates** | Ready-to-use YAML templates across 9 scientific disciplines |
 | **AI at Every Step** | 8 AI capabilities: classification, optimization, safety advisory, script generation, result interpretation, skill generation, agent chat, experiment memory |
 | **Adaptive Web GUI** | Real-time dashboard and multi-panel monitor that dynamically generates forms from templates — no hardcoded pages |
-| **6 AI Model Providers** | Claude, GPT-4o, Gemini, Ollama, vLLM, DeepSeek — switch with one config line |
+| **4 AI Model Providers** | Claude, GPT-4o, Ollama, DeepSeek via litellm — switch with one config line; vLLM or any OpenAI-compatible server works through the `openai` provider with a `base_url` |
 | **Safety-First Design** | 3-tier boundary validation (block / require confirmation / allow) prevents dangerous configurations |
 | **Instrument Drivers** | GPIB, USB, and serial instrument scanning with auto-retry and AI-powered classification of unknown devices |
 | **Experiment Memory** | SQLite + FTS5 full-text search remembers your successful parameters and learns from history |
@@ -81,7 +81,7 @@ The GUI dynamically generates measurement forms from YAML templates. Adding a ne
 </p>
 
 Key monitor features:
-- **4 chart panels** with independently selectable X/Y axes from 17 data channels
+- **4 chart panels** with independently selectable X/Y axes from 16 data channels plus time
 - **6 metric cards** that auto-configure based on measurement template
 - **Template selector** — switch between AHE, Hall, IV, etc. and the UI reconfigures
 - **Save/Load presets** — save your chart layout for each experiment type, restore with one click
@@ -105,7 +105,7 @@ Plus a universal **custom sweep** template for user-defined X-Y measurements (46
 
 ## Supported Instruments
 
-Works out of the box with ~50 models from 15+ vendors across all the disciplines above:
+Works out of the box with 68 models from 26 vendors across all the disciplines above:
 
 | Category | Representative Vendors / Models |
 |----------|--------------------------------|
@@ -123,9 +123,9 @@ Works out of the box with ~50 models from 15+ vendors across all the disciplines
 | Balances, pH, ISE | Mettler XS/XP (MT-SICS), Ohaus Adventurer, Thermo Orion A221 |
 | Gas / flow / pressure | Alicat MC-series MFCs, MKS PR4000 |
 | Temperature control | Lakeshore 335/336/340/350, Oxford Mercury iTC |
-| Gaussmeters | Lakeshore 425, 455, 475 |
-| DAQ | NI USB-6351/6001/6009 |
-| Quantum Design (condensed-matter specialty) | PPMS DynaCool/VersaLab, MPMS3 via MultiPyVu |
+| Gaussmeters | Lakeshore 425, 455 |
+| DAQ | NI USB-6351/6001 |
+| Quantum Design (condensed-matter specialty) | PPMS, MPMS3 via MultiPyVu |
 
 Don't see your instrument? The AI calls the `manual_lookup` tool to fetch the manufacturer's programming manual, then classifies from the `*IDN?` response — so truly unknown devices are handled gracefully.
 
@@ -159,7 +159,7 @@ model:
   base_url: "http://localhost:11434"
 ```
 
-Supported providers: **Claude** | **GPT-4o** | **Gemini** | **Ollama** | **vLLM** | **DeepSeek**
+Supported providers: **Claude** | **GPT-4o** | **Ollama** | **DeepSeek** (via litellm). vLLM or any other OpenAI-compatible server: use `provider: "openai"` with a `base_url` — see `configs/models.yaml`.
 
 ## CLI Commands
 
@@ -193,13 +193,14 @@ labharness serve
 | `search_literature` | Find published measurement protocols |
 | `analyze_data` | Run analysis with AI interpretation |
 | `generate_skill` | Create new measurement protocol skills |
+| `manual_lookup` | Fetch the manufacturer's programming manual and known Python drivers for an unfamiliar instrument |
 | `healthcheck` | Verify system status and available templates |
 
 ## Compared to Alternatives
 
 | | LabAgent | LabVIEW | PyMeasure | PICA | Custom Scripts |
 |---|---|---|---|---|---|
-| **AI-guided** | Yes (6 providers) | No | No | No | No |
+| **AI-guided** | Yes (4 providers) | No | No | No | No |
 | **Setup time** | Minutes | Weeks | Hours | Hours | Days |
 | **Safety checks** | 3-tier auto | Manual | None | Manual | Manual |
 | **Templates** | 46 across 9 disciplines | Rebuild each | Code each | ~10 | Code each |
@@ -227,11 +228,11 @@ labharness serve
   DELTA, HIGH_R, BREAKDOWN, SEEBECK, TUNNELING, PHOTO_IV, CV, TRANSFER,
   OUTPUT, CYCLIC_VOLTAMMETRY, EIS, CHRONOAMPEROMETRY, PHOTORESPONSE,
   POTENTIOMETRY) run on real hardware via four backends: pymeasure
-  adapter (~15 models), 3 in-tree VisaDrivers (Keithley 2400/6221,
+  adapter (16 models), 3 in-tree VisaDrivers (Keithley 2400/6221,
   Lakeshore 335), Zurich Instruments adapter (MFLI/HF2LI/SHFQA), and
   BioLogic adapter (SP-200/SP-300/VSP/VMP3). Remaining types fall back
   to the simulator.
-- [ ] Real execution for remaining types (HALL, MR, AHE, FMR, UV_VIS,
+- [ ] Real execution for remaining types (HALL, MR, AHE, FMR,
   PHOTOCURRENT, …)
 - [ ] Gamry / CH Instruments potentiostat wrappers (electrochemistry)
 - [ ] Community template marketplace
@@ -241,7 +242,7 @@ labharness serve
 
 We are building the future of AI-powered laboratory automation. Whether you work in physics, chemistry, biology, or materials science, your measurement templates and instrument drivers make this project better for everyone.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and [CATALOG.md](CATALOG.md) for the full template catalog with 46 templates and 16 instrument reference procedures.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and [CATALOG.md](CATALOG.md) for the full template catalog with 46 templates and 33 instrument reference procedures.
 
 ## Acknowledgments
 

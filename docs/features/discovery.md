@@ -55,18 +55,18 @@ After scanning, the classifier maps instruments to measurement roles. This is a 
 
 ### Stage 1: Dictionary Lookup
 
-A built-in database of ~68 known instruments across 26 vendors provides instant,
+A built-in database of 68 known instrument models across 26 vendors provides instant,
 deterministic classification. Selected highlights (see
 `src/lab_harness/discovery/classifier.py` for the full list):
 
 | Models | Vendor | Assigned Roles |
 |--------|--------|----------------|
-| 2400, 2410, 2420, 2440 | Keithley | source_meter |
-| 2000, 2001, 2002 | Keithley | dmm |
+| 2400, 2410 | Keithley | source_meter |
+| 2000 | Keithley | dmm |
 | 2182, 2182A | Keithley | nanovoltmeter |
 | 6221 | Keithley | ac_current_source |
-| 6517, 6517A, 6517B | Keithley | electrometer |
-| 425, 455, 475 | Lakeshore | gaussmeter |
+| 6517, 6517B | Keithley | electrometer |
+| 425, 455 | Lakeshore | gaussmeter |
 | 335, 336, 340, 350 | Lakeshore | temperature_controller |
 | Mercury iTC | Oxford Instruments | temp_controller_cryo |
 | E4980A, DSOX1204G, MSOX3054T, 33500B/33622A, E36313A, N9320B, E5071C | Keysight | lcr_meter / oscilloscope / function_generator / power_supply_dc / spectrum_analyzer / vna |
@@ -88,7 +88,7 @@ deterministic classification. Selected highlights (see
 | Orion A221 | Thermo Fisher | ph_meter |
 | MC-series | Alicat | mass_flow_controller |
 | PR4000 | MKS | pressure_gauge |
-| USB-6351, USB-6001, USB-6009 | National Instruments | daq |
+| USB-6351, USB-6001 | National Instruments | daq |
 | PPMS, MPMS3 | Quantum Design | ppms / mpms |
 
 ### Stage 2: LLM Fallback
@@ -120,7 +120,7 @@ Each measurement type defines its required instrument roles. Example configurati
 | Hall | source_meter, dmm, magnet |
 | PPMS_RT | ppms |
 
-The full classifier supports 40+ measurement types across electrical, magnetic, thermoelectric, optical, superconducting, electrochemical, and biosensor disciplines.
+The full classifier supports all 46 measurement types across electrical, magnetic, thermoelectric, optical, superconducting, electrochemical, and biosensor disciplines.
 
 ## Extending the Instrument Database
 

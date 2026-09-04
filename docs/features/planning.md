@@ -57,22 +57,20 @@ User-provided overrides are deep-merged into the template, with user values taki
 
 ## 46 Templates Across 9 Disciplines
 
-LabAgent ships with 46 built-in measurement templates organized by scientific discipline:
+LabAgent ships with 46 built-in measurement templates — 45 organized by scientific discipline plus a general-purpose custom sweep:
 
 | Discipline | Templates | Examples |
 |-----------|-----------|----------|
-| Electrical Characterization | 11 | IV, AHE, MR, RT, SOT, CV, Delta, High-R, Transfer, Output, Breakdown |
+| Electrical Characterization | 7 | IV, R-T, Delta, High-R, Transfer, Output, Breakdown |
+| Electrochemistry | 4 | Cyclic Voltammetry, EIS, Chronoamperometry, Potentiometry |
+| Semiconductor & Optoelectronics | 5 | Photo-IV, DLTS, Photocurrent, Photoresponse, Tunneling |
+| Sensors, Materials & Environmental | 7 | Gas Sensor, Humidity Response, Impedance Biosensor, Cell Counting, pH Calibration, Strain Gauge, Fatigue |
+| Dielectric & Ferroelectric | 4 | CV, P-E Loop, Pyroelectric, Capacitance-Frequency |
 | Thermoelectric | 2 | Seebeck, Thermal Conductivity |
-| Magnetic | 3 | Hall, FMR, Hysteresis |
-| Optical / Photonic | 2 | Photocurrent, Photoresponse |
 | Superconductivity | 2 | Tc, Jc |
-| Dielectric / Ferroelectric | 2 | P-E Loop, Pyroelectric |
-| Chemistry / Electrochemistry | 4 | Cyclic Voltammetry, EIS, Chronoamperometry, Potentiometry |
-| Biology / Biosensors | 2 | Impedance Biosensor, Cell Counting |
-| Materials Science / Environmental | 7 | Strain Gauge, Fatigue, Humidity Response, Gas Sensor, pH Calibration, DLTS, Capacitance-Frequency |
-| Semiconductor (additional) | 2 | Photo-IV, Tunneling |
-| Quantum Design Integration | 6 | PPMS-RT, PPMS-MR, PPMS-Hall, PPMS-HC, MPMS-MH, MPMS-MT |
-| General Purpose | 2 | Custom Sweep, Custom |
+| Magnetic Measurements (condensed-matter) | 8 | Hall, MR, AHE, SOT, FMR, Hysteresis, Magnetostriction, Nernst |
+| Quantum Design PPMS/MPMS | 6 | PPMS-RT, PPMS-MR, PPMS-Hall, PPMS-HC, MPMS-MH, MPMS-MT |
+| General Purpose | 1 | Custom Sweep |
 
 Each template defines safe defaults for its measurement type. For the full machine-readable catalog, see [CATALOG.md](https://github.com/Anai-Guo/LabAgent/blob/main/CATALOG.md).
 

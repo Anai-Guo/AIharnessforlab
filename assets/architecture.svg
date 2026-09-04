@@ -107,7 +107,7 @@
   <rect x="280" y="270" width="100" height="55" rx="8" fill="#EEF2FF"/>
   <text x="330" y="292" text-anchor="middle" font-family="Segoe UI, Arial" font-size="10" font-weight="600" fill="#4338CA">LLM Router</text>
   <text x="330" y="310" text-anchor="middle" font-family="Segoe UI, Arial" font-size="8" fill="#6366F1">litellm unified</text>
-  <text x="330" y="320" text-anchor="middle" font-family="Segoe UI, Arial" font-size="8" fill="#6366F1">6 providers</text>
+  <text x="330" y="320" text-anchor="middle" font-family="Segoe UI, Arial" font-size="8" fill="#6366F1">4 providers</text>
 
   <rect x="395" y="270" width="100" height="55" rx="8" fill="#FFF7ED"/>
   <text x="445" y="292" text-anchor="middle" font-family="Segoe UI, Arial" font-size="10" font-weight="600" fill="#92400E">Models</text>

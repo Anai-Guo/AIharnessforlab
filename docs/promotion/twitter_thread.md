@@ -6,7 +6,7 @@
 
 🧪 I just open-sourced LabAgent — a framework that connects AI directly to your lab instruments.
 
-46 measurement templates. ~50 instrument models. 9 disciplines — physics, chemistry, biology, materials, optics, more.
+46 measurement templates. 68 instrument models. 9 disciplines — physics, chemistry, biology, materials, optics, more.
 
 No more writing scripts from scratch. No more LabVIEW.
 
@@ -48,7 +48,7 @@ labharness web          → adaptive GUI
 labharness panel        → Claude Code-style terminal
 ```
 
-Works with ~50 models from 15+ vendors.
+Works with 68 models from 26 vendors.
 
 ---
 
@@ -56,14 +56,15 @@ Works with ~50 models from 15+ vendors.
 
 46 templates across 9 disciplines:
 
-⚡ Electrical: IV, R-T, delta-mode (Keithley, NI)
-🧪 Electrochemistry: CV, EIS, CA (BioLogic, Gamry, CHI, Autolab)
-💡 Optics: power, UV-Vis, photoresponse (Thorlabs, Ocean Insight)
-🧬 Biology: plate-reader absorbance/fluorescence (BMG, Molecular Devices)
-📡 RF/signals: scopes, AWGs, lock-ins, VNAs (Tek, Keysight, R&S, Zurich, SRS)
-🌡️ Analytical: balance, pH, MFC (Mettler, Orion, Alicat)
-❄️ Cryogenic: Lakeshore, Oxford, Quantum Design PPMS/MPMS
-+ semiconductor, dielectric, sensor templates
+⚡ Electrical: IV, R-T, delta-mode, FET (Keithley, NI)
+🧪 Electrochemistry: CV, EIS, CA, OCP (BioLogic, Gamry, CHI, Autolab)
+💡 Optoelectronics: photocurrent, photo-IV, photoresponse, tunneling
+🧬 Bio/sensors: impedance biosensor, cell counting, gas, humidity, pH
+🧲 Magnetic & superconducting: Hall, MR, AHE, FMR, Tc, Jc (Lakeshore, Oxford)
+❄️ Quantum Design PPMS/MPMS: R-T, MR, Hall, heat capacity, M-H, M-T
++ thermoelectric, dielectric/ferroelectric templates
+
+Instrument coverage also includes scopes, AWGs, lock-ins, VNAs, optical power meters, spectrometers, plate readers, balances, MFCs (Tek, Keysight, R&S, Zurich, SRS, Thorlabs, Ocean Insight, BMG, Mettler, Alicat).
 
 ---
 

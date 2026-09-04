@@ -35,7 +35,7 @@ src/lab_harness/
   planning/
     plan_builder.py     - Build plans from YAML templates
     boundary_checker.py - Safety boundary validation
-    templates/          - YAML templates (ahe, mr, iv, rt, sot, cv)
+    templates/          - 46 YAML measurement templates (iv, rt, ahe, cv, ppms_rt, ...)
   skills/
     registry.py     - Skill discovery + progressive disclosure (Level 0/1)
 skills/
@@ -46,8 +46,8 @@ configs/
   default_safety.yaml     - Safety limits
   common_instruments.yaml - Known instrument database
 tests/
-  25+ test files covering models, planning, discovery, memory, analysis,
-  skills, budget, manual_lookup, web API, simulators — 184 tests total
+  35 test files covering models, planning, discovery, memory, analysis,
+  skills, budget, manual_lookup, web API, simulators — 276 tests total
 ```
 
 ## Key Design Decisions
